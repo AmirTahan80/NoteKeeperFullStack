@@ -74,7 +74,8 @@ namespace NoteBookKeeper.Api.Controllers
                 {
                     p.Uuid,
                     p.Topic,
-                    p.Description
+                    p.Description,
+                    p.CreationDate
                 }).ToListAsync();
 
             return Ok(notes);
@@ -91,7 +92,8 @@ namespace NoteBookKeeper.Api.Controllers
                     p.Detail,
                     p.SearchWords,
                     p.Uuid,
-                    p.Files.Select(e => $"http://localhost:9000/{e.FilePath}/{e.FileName}").ToList()))
+                    p.Files.Select(e => $"http://localhost:9000/{e.FilePath}/{e.FileName}").ToList(),
+                    p.CreationDate))
                 .ToListAsync();
             return Ok(noteItems);
         }
