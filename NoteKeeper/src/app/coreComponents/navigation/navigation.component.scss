@@ -1,49 +1,135 @@
-// filepath: /d:/Projects/Private/NoteBookKeeper/Client/NoteKeeper/src/app/coreComponents/navigation/navigation.component.scss
-.navbar {
-    background-color: #ffcc80; /* Warm background color */
+// circular-nav.component.scss
+.nav-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    z-index: 1000;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .menu-toggle {
+    position: fixed;
+    top: 20px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-}
-
-.menu-button {
-    display: none;
-}
-
-.nav-title {
-    flex-grow: 1;
-    text-align: center;
-    color: white;
-}
-
-.nav-links {
+    justify-content: center;
+    transition: all 0.3s ease;
+  
+    .menu-icon {
+      font-size: 24px;
+      transition: transform 0.3s ease;
+    }
+  
+    &:hover {
+      background: #333;
+      transform: scale(1.1);
+      
+      .menu-icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  
+  .menu-display {
     display: flex;
-    gap: 20px;
-}
-
-.nav-links a {
-    color: white;
-    text-decoration: none;
-}
-
-.nav-links a:hover {
-    color: #ff8c00; /* Warm hover color */
-}
-
-.sidenav-container {
-    display: none;
-}
-
-@media (max-width: 768px) {
-    .menu-button {
-        display: block;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+  }
+  
+  .active-menu {
+    position: relative;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  
+    .menu-circle {
+      width: 100px;
+      height: 100px;
+      background: #333;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      direction: rtl;
+      transition: all 0.3s ease;
+  
+      &:hover {
+        background: #444;
+        transform: scale(1.05) rotate(calc(-1 * var(--rotation)));
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      }
     }
-
-    .nav-links {
-        display: none;
+  
+    .nav-marker {
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid #333;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    .sidenav-container {
-        display: block;
+  }
+  
+  .nav-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  
+    .nav-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #000;
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.3s ease;
+  
+      &:hover {
+        background: #333;
+        transform: scale(1.1);
+      }
+  
+      span {
+        display: inline-block;
+      }
     }
-}
+  }
+  
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .active-menu .menu-circle {
+      width: 80px;
+      height: 80px;
+      font-size: 16px;
+    }
+  
+    .nav-buttons .nav-btn {
+      width: 35px;
+      height: 35px;
+      font-size: 16px;
+    }
+  }

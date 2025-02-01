@@ -1,0 +1,48 @@
+<!-- features/notes/topic-notes/topic-notes.component.html -->
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+      <button mat-icon-button routerLink="/notes">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>{{ topicName }}</h1>
+    </div>
+  
+    <!-- Notes List -->
+    <div class="notes-grid">
+      <mat-card *ngFor="let note of notes" class="note-card">
+        <mat-card-header>
+          <mat-card-title>{{ note.detail }}</mat-card-title>
+          <mat-card-subtitle>{{ note.creationDate| date:'medium' }}</mat-card-subtitle>
+        </mat-card-header>
+        
+        <!-- features/notes/topic-notes/topic-notes.component.html -->
+        <mat-card-content>
+            <p class="note-content">{{ note.detail }}</p>
+            <!-- Image Grid -->
+            <div class="image-grid">
+                <div *ngFor="let img of note.filePaths" class="image-container">
+                    <img [src]="img" alt="Note image" class="note-image">
+                </div>
+            </div>
+        </mat-card-content>
+        
+        <mat-card-actions align="end">
+          <button mat-button color="primary" (click)="viewNoteDetails(note.uuid)">
+            جزئیات
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+  
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-state">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+  
+      <!-- Empty State -->
+      <div *ngIf="!loading && notes.length === 0" class="empty-state">
+        <p>هیچ نوتی برای این موضوع یافت نشد</p>
+      </div>
+    </div>
+  </div>

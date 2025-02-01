@@ -1,49 +1,69 @@
-import { Component, ViewChild } from '@angular/core';
-import { trigger, state, style, transition, animate } from '@angular/animations';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FlexLayoutModule} from '@ngbracket/ngx-layout';
-
-
+import { Router, RouterModule } from '@angular/router';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-navigation',
-  standalone:true,
-  imports: [
-    CommonModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    MatListModule,
-    MatIconModule,
-    MatButtonModule,
-    FlexLayoutModule
-  ],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './navigation.component.html',
-  styleUrl: './navigation.component.scss',
+  styleUrls: ['./navigation.component.scss'],
   animations: [
-    trigger('fadeIn', [
-      state('void', style({ opacity: 0 })),
-      transition(':enter', [
-        animate('0.5s ease-in')
+    trigger('menuContainer', [
+      state('void', style({
+        transform: 'translateY(-100%)',
+        opacity: 0
+      })),
+      state('*', style({
+        transform: 'translateY(0)',
+        opacity: 1
+      })),
+      transition('void <=> *', [
+        animate('400ms cubic-bezier(0.4, 0, 0.2, 1)')
+      ])
+    ]),
+    trigger('menuRotate', [
+      transition('* => *', [
+        animate('600ms cubic-bezier(0.4, 0, 0.2, 1)')
       ])
     ])
   ]
 })
 export class NavigationComponent {
-  @ViewChild('sidenav') sidenav!: MatSidenav;
+  activeIndex = 0;
+  isMenuVisible = false;
+  currentRotation = 0;
+  menuItems = [
+    { label: 'خانه', route: '/home' },
+    { label: 'نوت‌ها', route: '/note-list' },
+    { label: 'نوت جدید', route: '/new-note' }
+  ];
 
-  toggleSidenav() {
-    console.log('log');
-    
-    this.sidenav.toggle();
+  constructor(private router: Router) {}
+
+  toggleMenu() {
+    this.isMenuVisible = !this.isMenuVisible;
   }
 
-  closeSidenav() {
-    console.log('log');
-    this.sidenav.close();
+  async navigate(direction: 'left' | 'right') {
+    // Rotate animation
+    this.currentRotation += direction === 'left' ? 120 : -120;
+    
+    // Update active index
+    if (direction === 'left') {
+      this.activeIndex = (this.activeIndex + 1) % this.menuItems.length;
+    } else {
+      this.activeIndex = (this.activeIndex - 1 + this.menuItems.length) % this.menuItems.length;
+    }
+  }
+
+  async navigateToRoute() {
+    // First animate menu up
+    this.isMenuVisible = false;
+    
+    // Wait for animation to complete then navigate
+    await new Promise(resolve => setTimeout(resolve, 400));
+    this.router.navigate([this.menuItems[this.activeIndex].route]);
   }
 }

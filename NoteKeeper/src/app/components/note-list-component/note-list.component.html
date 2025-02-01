@@ -1,0 +1,68 @@
+<!-- features/notes/list/note-list.component.html -->
+<div class="container">
+    <!-- Header Section -->
+    <div class="header">
+      <h1>موضوعات</h1>
+      <button mat-flat-button color="primary" routerLink="/new-note">
+        <mat-icon>add</mat-icon>
+        موضوع جدید
+      </button>
+    </div>
+  
+    <!-- Search and Filter Section -->
+    <mat-card class="search-card">
+      <mat-card-content class="search-content">
+        <mat-form-field appearance="outline" class="search-input">
+          <mat-label>جستجو</mat-label>
+          <input matInput
+                 [(ngModel)]="searchTerm"
+                 (input)="onSearch($event)"
+                 placeholder="جستجو در موضوعات...">
+          <mat-icon matPrefix>search</mat-icon>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="page-size-select">
+          <mat-label>تعداد نمایش در هر صفحه</mat-label>
+          <mat-select [(ngModel)]="pageSize" (selectionChange)="onPageSizeChange()">
+            <mat-option *ngFor="let size of pageSizeOptions" [value]="size">
+              {{ size }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  
+    <!-- Notes List -->
+    <mat-card class="list-card">
+      <mat-card-content>
+        <div class="notes-container">
+          <div *ngFor="let note of notes" class="note-item">
+            <h3 class="note-subject">{{ note.topic }}</h3>
+            <p class="note-description">{{ note.description }}</p>
+            <span class="note-date">{{ note.creationDate | date:'medium' }}</span>
+            <div class="note-item" [routerLink]="['/note-list/', note.uuid]">
+              نوت ها
+            </div>
+          </div>
+  
+          <div *ngIf="loading" class="loading-state">
+            <mat-spinner diameter="40"></mat-spinner>
+          </div>
+  
+          <div *ngIf="!loading && notes.length === 0" class="empty-state">
+            موردی یافت نشد
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  
+    <!-- Pagination -->
+    <mat-paginator
+      [length]="totalItems"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      [pageIndex]="currentPage"
+      (page)="onPageChange($event)"
+      aria-label="انتخاب صفحه">
+    </mat-paginator>
+  </div>

@@ -1,28 +1,38 @@
-<div style="height: 80vh;">
-    <mat-toolbar color="primary">
-      <mat-toolbar-row>
-        <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
-          <mat-icon>menu</mat-icon>
-        </button>
-        <span>نوت کیپر</span>
-        <span class="menu-spacer"></span>
-        <div fxShow="true" fxHide.lt-md>
-          <!-- The following menu items will be hidden on both SM and XS screen sizes -->
-          <a href="#" mat-button>خانه</a>
-          <a href="#" mat-button>نوت ها</a>
-          <a href="#" mat-button>نوت جدید</a>
-        </div>
-      </mat-toolbar-row>
-    </mat-toolbar>
-  
-    <mat-sidenav-container fxFlexFill>
-      <mat-sidenav #sidenav>
-        <mat-nav-list>
-          <a href="#" mat-list-item>خانه</a>
-          <a href="#" mat-list-item>نوت ها</a>
-          <a href="#" mat-list-item>نوت جدید</a>
-        </mat-nav-list>
-      </mat-sidenav>
-    </mat-sidenav-container>
+<!-- circular-nav.component.html -->
+<div class="nav-container" 
+     [@menuContainer]="isMenuVisible ? 'visible' : 'void'" 
+     *ngIf="isMenuVisible">
+
+  <!-- Active Menu Item -->
+  <div class="menu-display">
+    <div class="active-menu" 
+         [style.transform]="'rotate(' + currentRotation + 'deg)'"
+         (click)="navigateToRoute()">
+      <div class="menu-circle" 
+           [style.transform]="'rotate(' + (-currentRotation) + 'deg)'">
+        {{ menuItems[activeIndex].label }}
+      </div>
+      <!-- Navigation Marker -->
+      <div class="nav-marker" 
+           [style.transform]="'rotate(' + (-currentRotation) + 'deg)'">
+      </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+      <button class="nav-btn" (click)="navigate('right')">
+        <span>→</span>
+      </button>
+      <button class="nav-btn" (click)="navigate('left')">
+        <span>←</span>
+      </button>
+    </div>
   </div>
-  
+</div>
+
+<!-- Toggle Button when menu is hidden -->
+<button class="menu-toggle" 
+        (click)="toggleMenu()">
+  <span *ngIf="!isMenuVisible"  class="menu-icon">≡</span>
+  <span *ngIf="isMenuVisible"  class="menu-icon">✕</span>
+</button>
