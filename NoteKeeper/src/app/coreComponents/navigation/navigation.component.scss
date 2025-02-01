@@ -1,0 +1,49 @@
+// filepath: /d:/Projects/Private/NoteBookKeeper/Client/NoteKeeper/src/app/coreComponents/navigation/navigation.component.scss
+.navbar {
+    background-color: #ffcc80; /* Warm background color */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-button {
+    display: none;
+}
+
+.nav-title {
+    flex-grow: 1;
+    text-align: center;
+    color: white;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+}
+
+.nav-links a:hover {
+    color: #ff8c00; /* Warm hover color */
+}
+
+.sidenav-container {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .menu-button {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .sidenav-container {
+        display: block;
+    }
+}
