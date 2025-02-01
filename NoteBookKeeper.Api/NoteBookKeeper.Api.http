@@ -1,0 +1,77 @@
+﻿@NoteBookKeeper.Api_HostAddress = http://localhost:5220
+
+### Login
+POST {{NoteBookKeeper.Api_HostAddress}}/api/user/Login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "userName": "AmirTahan",
+    "password": "33682964"
+}
+
+###
+
+### Register
+POST {{NoteBookKeeper.Api_HostAddress}}/api/user/register/
+Accept: application/json
+Content-Type: application/json
+
+{
+    "userName": "AmirTahan",
+    "email":"amirhosin@gmail.com",
+    "password": "33682964",
+    "rePassword":"33682964"
+}
+
+###
+
+### AddNoteSetting
+POST {{NoteBookKeeper.Api_HostAddress}}/api/addnote/createnotesetting
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImEwMjk3NWZlLWM2OGItNDY1MC05OThkLTA4ZGQzZjEyYWI5NCIsImV4cCI6MTczODA2ODY4MiwiaXNzIjoiTm90ZUtlZXBlci5pciIsImF1ZCI6Ik5vdGVLZWVwZXIuaXIifQ.EKwG5bU1sOEV0_jo7sXAgs1JsVticprFQqSKmw9KCjI
+
+{
+  "topic":"تست این ابزار باحال",
+  "description":"این یک رزومه تست میباشد"
+}
+
+###
+
+### AddNoteItem
+POST {{NoteBookKeeper.Api_HostAddress}}/api/addnote/createnoteitem
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImEwMjk3NWZlLWM2OGItNDY1MC05OThkLTA4ZGQzZjEyYWI5NCIsImV4cCI6MTczODA2ODY4MiwiaXNzIjoiTm90ZUtlZXBlci5pciIsImF1ZCI6Ik5vdGVLZWVwZXIuaXIifQ.EKwG5bU1sOEV0_jo7sXAgs1JsVticprFQqSKmw9KCjI
+
+{
+  "detail":"این تست آیتم هاست",
+  "searchWords":"",
+  "noteSettingId":"3608cb8f-12a6-44d1-8625-43d0c5c4b33c",
+  "redirectLink":""
+}
+
+###
+
+### GetNotes
+GET {{NoteBookKeeper.Api_HostAddress}}/api/addnote/getnotes
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImEwMjk3NWZlLWM2OGItNDY1MC05OThkLTA4ZGQzZjEyYWI5NCIsImV4cCI6MTczODI4MTQ1NywiaXNzIjoiTm90ZUtlZXBlci5pciIsImF1ZCI6Ik5vdGVLZWVwZXIuaXIifQ.b3Wd9qXG0MCj-oJ16NFD0SZi2yikQK4pC2kXO8e75Vs
+
+{
+  "search":null,
+  "pageNumber":1,
+  "pageSize":10
+}
+
+###
+
+### GetNotes
+GET {{NoteBookKeeper.Api_HostAddress}}/api/addnote/getnoteitems/3608cb8f-12a6-44d1-8625-43d0c5c4b33c
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImEwMjk3NWZlLWM2OGItNDY1MC05OThkLTA4ZGQzZjEyYWI5NCIsImV4cCI6MTczODI4MTQ1NywiaXNzIjoiTm90ZUtlZXBlci5pciIsImF1ZCI6Ik5vdGVLZWVwZXIuaXIifQ.b3Wd9qXG0MCj-oJ16NFD0SZi2yikQK4pC2kXO8e75Vs
+
+###
