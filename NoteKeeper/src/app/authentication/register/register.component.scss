@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #ffe5b4; /* Warm background color */
+    background-color: #e0e0e0; /* Warm background color */
 }
 
 .register-card {
@@ -12,7 +12,8 @@
     max-width: 400px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #ffcc80; /* Warm card color */
+    background-color: #ffffff; /* Warm card color */
+    border-radius: 5%;
 }
 
 .register-form {
@@ -31,5 +32,5 @@ button {
 }
 
 button:hover {
-    background-color: #ff8c00; /* Warm hover color */
+    background-color: #0441b3; /* Warm hover color */
 }

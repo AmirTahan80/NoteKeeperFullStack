@@ -29,7 +29,12 @@ export class LoginComponent {
 
   constructor(private clientService: ApiService, private authenticationModel:AuthenticationModel,
     private router:Router
-  ) {}
+  ) {
+    if(this.authenticationModel.IsUserLogin())
+    {
+      this.router.navigate(['/']);
+    }
+  }
 
   login(): LoginResponseDto{
       var request = new LoginUserDto();

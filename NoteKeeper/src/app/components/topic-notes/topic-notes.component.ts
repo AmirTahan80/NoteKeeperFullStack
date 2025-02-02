@@ -1,13 +1,14 @@
 // features/notes/topic-notes/topic-notes.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ApiService } from '../../services/base.api';
 import { ApiUrlSettings } from '../../environmets/ApiSettings';
+import { AuthenticationModel } from '../../environmets/AuthenticationModel';
 
 interface TopicNote {
   id: number;
@@ -39,8 +40,15 @@ export class TopicNotesComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private noteService: ApiService
-  ) {}
+    private noteService: ApiService,
+          private router:Router,
+          private authenticationModel:AuthenticationModel)
+        {
+          if(!this.authenticationModel.IsUserLogin())
+          {
+            this.router.navigate(['/sign-in'])
+          }
+        }
 
   ngOnInit() {
     this.topicId = this.route.snapshot.paramMap.get('id') || '';

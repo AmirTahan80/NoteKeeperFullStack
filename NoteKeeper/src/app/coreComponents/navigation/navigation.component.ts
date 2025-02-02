@@ -37,7 +37,9 @@ export class NavigationComponent {
   menuItems = [
     { label: 'خانه', route: '/home' },
     { label: 'نوت‌ها', route: '/note-list' },
-    { label: 'نوت جدید', route: '/new-note' }
+    { label: 'نوت جدید', route: '/new-note' },
+    { label: 'لاگین', route: '/sign-in' },
+    { label: 'ثبت نام', route: '/sign-up' }
   ];
 
   constructor(private router: Router) {}
