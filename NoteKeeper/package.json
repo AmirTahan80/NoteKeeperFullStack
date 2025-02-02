@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:NoteKeeper": "node dist/note-keeper/server/server.mjs"
+    "serve:NoteKeeper": "ng serve"
   },
   "private": true,
   "dependencies": {
@@ -20,12 +20,12 @@
     "@angular/material": "^19.1.2",
     "@angular/platform-browser": "^19.1.0",
     "@angular/platform-browser-dynamic": "^19.1.0",
-    "@angular/platform-server": "^19.1.0",
     "@angular/router": "^19.1.0",
     "@angular/ssr": "^19.1.5",
     "@ckeditor/ckeditor5-angular": "^9.1.0",
     "@ckeditor/ckeditor5-build-classic": "^44.1.0",
     "@ngbracket/ngx-layout": "^19.0.0",
+    "@nguniversal/express-engine": "^7.0.2",
     "express": "^4.18.2",
     "flex-layout": "^1.0.1",
     "rxjs": "~7.8.0",

@@ -6,6 +6,7 @@ import { NewNoteComponent } from './components/newnote/newnote.component';
 import { NoteListComponent } from './components/note-list-component/note-list.component';
 import { TopicNotesComponent } from './components/topic-notes/topic-notes.component';
 import { AddNoteComponent } from './components/add-note/add-note.component';
+import { NoteDetailComponent } from './components/note-detail/note-detail.component';
 
 export const routes: Routes = [
     {
@@ -35,5 +36,9 @@ export const routes: Routes = [
     {
         path:"new-note-item/:id",
         component:AddNoteComponent
+    },
+    {
+        path:"app-note-detail/:id",
+        component:NoteDetailComponent
     }
 ];

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +12,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { ApiService } from '../../services/base.api';
 import { ApiUrlSettings } from '../../environmets/ApiSettings';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AuthenticationModel } from '../../environmets/AuthenticationModel';
 
 @Component({
   selector: 'app-note-list',
@@ -42,7 +43,14 @@ export class NoteListComponent implements OnInit {
   private searchSubject = new Subject<string>();
   apiSettings = new ApiUrlSettings();
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService,
+      private router:Router,
+      private authenticationModel:AuthenticationModel)
+    {
+      if(!this.authenticationModel.IsUserLogin())
+      {
+        this.router.navigate(['/sign-in'])
+      }
     this.searchSubject
       .pipe(
         debounceTime(300),

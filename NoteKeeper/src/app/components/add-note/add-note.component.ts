@@ -15,6 +15,7 @@ import { ApiUrlSettings } from '../../environmets/ApiSettings';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ViewChild, ElementRef } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { AuthenticationModel } from '../../environmets/AuthenticationModel';
 
 interface NewNote {
   detail: string;
@@ -55,8 +56,13 @@ export class AddNoteComponent implements OnInit {
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router,
-    private apiService:ApiService
+    private apiService:ApiService,
+    private authenticationModel:AuthenticationModel
   ) {
+    if(!this.authenticationModel.IsUserLogin())
+    {
+      this.router.navigate(['/sign-in'])
+    }
     this.noteForm = this.fb.group({
       detail: ['', Validators.required],
       redirectLink: [''],

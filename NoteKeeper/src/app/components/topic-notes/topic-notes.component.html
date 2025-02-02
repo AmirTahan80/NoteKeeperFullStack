@@ -22,7 +22,6 @@
         
         <!-- features/notes/topic-notes/topic-notes.component.html -->
         <mat-card-content>
-            <p class="note-content">{{ note.detail }}</p>
             <!-- Image Grid -->
             <div class="image-grid">
                 <div *ngFor="let img of note.filePaths" class="image-container">
@@ -32,7 +31,7 @@
         </mat-card-content>
         
         <mat-card-actions align="end">
-          <button mat-button color="primary" (click)="viewNoteDetails(note.uuid)">
+          <button mat-button color="primary" [routerLink]="['/app-note-detail/',note.uuid]">
             جزئیات
             <mat-icon>chevron_left</mat-icon>
           </button>

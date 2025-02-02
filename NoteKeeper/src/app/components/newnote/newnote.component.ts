@@ -11,10 +11,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { LoadingOverlayComponent } from '../../coreComponents/loading/loadingoverlay.component ';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT} from '@angular/common';
 import { ApiService } from '../../services/base.api';
 import { ApiUrlSettings } from '../../environmets/ApiSettings';
 import { Router } from '@angular/router';
+import { AuthenticationModel } from '../../environmets/AuthenticationModel';
 
 interface NoteForm {
   subject: string;
@@ -50,8 +51,14 @@ export class NewNoteComponent implements OnInit {
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private apiService: ApiService,
-    private router:Router
-  ) {}
+    private router:Router,
+    private authenticationModel:AuthenticationModel
+      ) {
+        if(!this.authenticationModel.IsUserLogin())
+        {
+          this.router.navigate(['/sign-in'])
+        }
+      }
 
   ngOnInit(): void {
     this.initForm();
