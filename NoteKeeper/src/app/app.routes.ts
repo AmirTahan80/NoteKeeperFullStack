@@ -5,6 +5,7 @@ import { HomeComponent } from './components/home/home.component';
 import { NewNoteComponent } from './components/newnote/newnote.component';
 import { NoteListComponent } from './components/note-list-component/note-list.component';
 import { TopicNotesComponent } from './components/topic-notes/topic-notes.component';
+import { AddNoteComponent } from './components/add-note/add-note.component';
 
 export const routes: Routes = [
     {
@@ -30,5 +31,9 @@ export const routes: Routes = [
     {
         path:"note-list/:id",
         component:TopicNotesComponent
+    },
+    {
+        path:"new-note-item/:id",
+        component:AddNoteComponent
     }
 ];

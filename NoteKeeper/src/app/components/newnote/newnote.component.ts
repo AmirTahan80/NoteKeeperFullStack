@@ -2,7 +2,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { finalize } from 'rxjs/operators';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -14,7 +13,7 @@ import { TextFieldModule } from '@angular/cdk/text-field';
 import { LoadingOverlayComponent } from '../../coreComponents/loading/loadingoverlay.component ';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/base.api';
-import { ApiBaseSettings, ApiUrlSettings } from '../../environmets/ApiSettings';
+import { ApiUrlSettings } from '../../environmets/ApiSettings';
 import { Router } from '@angular/router';
 
 interface NoteForm {
@@ -66,10 +65,7 @@ export class NewNoteComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('Form submit');
-    
     if (this.noteForm.valid) {
-      console.log('Form submit2');
       const formData: NoteForm = this.noteForm.value;
       this.isLoading = true;
       var body= new CreateNoteSettingDto();
@@ -80,10 +76,7 @@ export class NewNoteComponent implements OnInit {
         // Replace with your actual service call
         this.apiService.post(this.apiSettings.createNoteSetting,body)
         .subscribe({
-          next:(value)=>{
-            console.log('Success');
-            console.log(value);
-            
+          next:(value)=>{            
             if(value == null)
             {
               this.showSuccessMessage();

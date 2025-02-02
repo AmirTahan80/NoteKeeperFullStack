@@ -2,8 +2,12 @@
 <div class="container">
     <!-- Header -->
     <div class="header">
-      <button mat-icon-button routerLink="/notes">
-        <mat-icon>arrow_back</mat-icon>
+      <button mat-icon-button routerLink="/note-list">
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+      <button mat-flat-button color="primary" [routerLink]="['/new-note-item/',topicId]">
+        <mat-icon>add</mat-icon>
+        جزوه جدید
       </button>
       <h1>{{ topicName }}</h1>
     </div>

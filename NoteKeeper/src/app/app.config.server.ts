@@ -6,6 +6,7 @@ import { serverRoutes } from './app.routes.server';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimations, provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideClientHydration } from '@angular/platform-browser';
 
 const serverConfig: ApplicationConfig = {
   providers: [

@@ -30,9 +30,13 @@ export class ApiService {
     return this.http.get<T>(`${this.baseUrl}${url}`, httpOptions);
   }
 
-  post<T>(url: string, params: any) {
-    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  post<T>(url: string, params: any, contentType='application/json') {
+    let headers = new HttpHeaders();
     
+    if (!(params instanceof FormData)) {
+      headers = headers.set('Content-Type', contentType);
+    }
+
     if (this.authentication.IsUserLogin()) {
       headers = headers.set(
         'Authorization',
