@@ -82,11 +82,11 @@ namespace NoteBookKeeper.Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("[action]/{NoteId}")]
-        public async Task<IActionResult> GetNoteItems([FromRoute] Guid NoteId)
+        [HttpGet("[action]/{noteId}")]
+        public async Task<IActionResult> GetNoteItems([FromRoute] Guid noteId)
         {
             var noteItems = await ctx.NoteItems
-                .Where(n => n.NoteSetting.Uuid == NoteId)
+                .Where(n => n.NoteSetting.Uuid == noteId)
                 .Select(p => new GetNoteItemsDto(
                     p.RedirectLink,
                     p.Detail,
@@ -96,6 +96,22 @@ namespace NoteBookKeeper.Api.Controllers
                     p.CreationDate))
                 .ToListAsync();
             return Ok(noteItems);
+        }
+
+        [Authorize]
+        [HttpGet("[action]/{noteItemId}")]
+        public async Task<IActionResult> GetNoteItemById([FromRoute] Guid noteItemId)
+        {
+            var noteItem = await ctx.NoteItems.Where(p=> p.Uuid == noteItemId)
+                .Select(p => new GetNoteItemsDto(
+                    p.RedirectLink,
+                    p.Detail,
+                    p.SearchWords,
+                    p.Uuid,
+                    p.Files.Select(e => $"http://localhost:9000/{e.FilePath}/{e.FileName}").ToList(),
+                    p.CreationDate))
+                .FirstOrDefaultAsync();
+            return Ok(noteItem);
         }
 
         [Authorize]
