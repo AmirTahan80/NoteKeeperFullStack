@@ -73,11 +73,6 @@ export class TopicNotesComponent implements OnInit {
       }
     });
   }
-
-  viewNoteDetails(noteId: string) {
-    // Navigate to note details page
-    // You can implement this later
-  }
 }
 
 class GetNoteItemsDto {
@@ -86,5 +81,5 @@ class GetNoteItemsDto {
   searchWords='';
   uuid='';
   filePaths='';
-  creationDate='';
+  creationDate:Date=new Date;
 }
