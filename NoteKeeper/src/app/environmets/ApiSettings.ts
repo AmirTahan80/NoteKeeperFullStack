@@ -10,4 +10,5 @@ export class ApiUrlSettings{
     createNoteSetting="/AddNote/CreateNoteSetting";
     getNoteSettings="/addnote/getnotes";
     getNoteSettingItems="/addnote/getnoteitems";
+    createNoteSettingItem="/addnote/createnoteitem";
 }

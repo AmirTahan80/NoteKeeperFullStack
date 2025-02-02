@@ -2,9 +2,10 @@
 <div class="container">
     <!-- Header Section -->
     <div class="header">
-      <h1>موضوعات</h1>
+      
+      <h1><mat-icon>note</mat-icon>موضوعات</h1>
       <button mat-flat-button color="primary" routerLink="/new-note">
-        <mat-icon>add</mat-icon>
+        <mat-icon>note_add</mat-icon>
         موضوع جدید
       </button>
     </div>
@@ -40,9 +41,10 @@
             <h3 class="note-subject">{{ note.topic }}</h3>
             <p class="note-description">{{ note.description }}</p>
             <span class="note-date">{{ note.creationDate | date:'medium' }}</span>
-            <div class="note-item" [routerLink]="['/note-list/', note.uuid]">
-              نوت ها
-            </div>
+            <button mat-flat-button color="warn" [routerLink]="['/note-list/', note.uuid]" style="margin: 10px;">
+              <mat-icon> format_indent_decrease</mat-icon>
+              جزئیات
+            </button>
           </div>
   
           <div *ngIf="loading" class="loading-state">
