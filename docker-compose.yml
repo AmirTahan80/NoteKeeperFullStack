@@ -46,6 +46,6 @@
       - notebookkeeper.api
       - angular
 
-  volumes:
+volumes:
     sqlserver-data:
     minio-data:
