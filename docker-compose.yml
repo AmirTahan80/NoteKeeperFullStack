@@ -40,7 +40,10 @@
   nginx:
     image: nginx:alpine
     volumes:
-      - ./nginx.conf:/home/amir/utilities/nginx.conf:ro
+      - type: bind
+        source: ./nginx.conf
+        target: /etc/nginx/nginx.conf
+        read_only: true
     ports:
       - "80:80"
     depends_on:
