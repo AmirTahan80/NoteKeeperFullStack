@@ -14,6 +14,7 @@
     depends_on:
       - sqlserver
       - minio
+  
   sqlserver:
     image: mcr.microsoft.com/mssql/server:latest
     environment:
@@ -39,12 +40,11 @@
   nginx:
     image: nginx:alpine
     volumes:
-      - /home/amir/utilities/nginx.conf
+      - ./nginx.conf:/home/amir/utilities/nginx.conf:ro
     ports:
       - "80:80"
     depends_on:
       - notebookkeeper.api
-      - angular
 
 volumes:
     sqlserver-data:
