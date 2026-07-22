@@ -3,7 +3,7 @@
     <ng-container *ngIf="!error; else errorTpl">
         <ng-container *ngIf="noteItem">
             <!-- header section -->
-            <div class="header-section" [@fadeInDown]>
+            <div class="header-section">
                 <div class="search-tags">
                     <span *ngFor="let word of getSearchWordsArray()" 
                           class="tag">
@@ -16,7 +16,7 @@
             <!-- main content -->
             <div class="content-grid">
                 <!-- date section -->
-                <div class="card date-card" [@fadeInLeft]>
+                <div class="card date-card">
                     <div class="date-content">
                         <i class="fas fa-calendar"></i>
                         <div class="date-text">
@@ -27,11 +27,11 @@
                 </div>
 
                 <!-- detail section -->
-                <div class="card detail-card" [@fadeInUp]>
-                    <p class="detail-text">{{ noteItem.detail }}</p>
+                <div class="card detail-card">
+                    <div class="detail-text" [innerHTML]="noteItem.detail"></div>
                     <div *ngIf="noteItem.redirectLink" class="link-section">
                         <i class="fas fa-link"></i>
-                        <a [href]="noteItem.redirectLink" target="_blank">
+                        <a [href]="noteItem.redirectLink" target="_blank" rel="noopener noreferrer">
                             لینک مرتبط
                         </a>
                     </div>
@@ -43,8 +43,7 @@
                 <h3 class="section-title">فایل‌های پیوست شده</h3>
                 <div class="files-grid">
                     <div *ngFor="let fileUrl of noteItem.filePaths; let i = index"
-                         class="file-item"
-                         [@fadeIn]="{ value: '', params: { delay: i * 100 } }">
+                         class="file-item">
                         
                         <ng-container>
                             <img [src]="fileUrl" [alt]="'فایل ' + (i + 1)">
@@ -52,7 +51,7 @@
 
                         <ng-template #fileDownload>
                             <div class="download-button">
-                                <a [href]="fileUrl" target="_blank">
+                                <a [href]="fileUrl" target="_blank" rel="noopener noreferrer">
                                     دانلود فایل
                                 </a>
                             </div>

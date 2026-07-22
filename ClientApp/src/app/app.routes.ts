@@ -7,6 +7,7 @@ import { NoteListComponent } from './components/note-list-component/note-list.co
 import { TopicNotesComponent } from './components/topic-notes/topic-notes.component';
 import { AddNoteComponent } from './components/add-note/add-note.component';
 import { NoteDetailComponent } from './components/note-detail/note-detail.component';
+import { authGuard } from './authentication/auth.guard';
 
 export const routes: Routes = [
     {
@@ -23,22 +24,27 @@ export const routes: Routes = [
     },
     {
         path:"new-note",
-        component:NewNoteComponent
+        component:NewNoteComponent,
+        canActivate: [authGuard]
     },
     {
         path:"note-list",
-        component:NoteListComponent
+        component:NoteListComponent,
+        canActivate: [authGuard]
     },
     {
         path:"note-list/:id",
-        component:TopicNotesComponent
+        component:TopicNotesComponent,
+        canActivate: [authGuard]
     },
     {
         path:"new-note-item/:id",
-        component:AddNoteComponent
+        component:AddNoteComponent,
+        canActivate: [authGuard]
     },
     {
         path:"app-note-detail/:id",
-        component:NoteDetailComponent
+        component:NoteDetailComponent,
+        canActivate: [authGuard]
     }
 ];

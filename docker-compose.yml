@@ -1,54 +1,35 @@
-﻿services:
-  notebookkeeper.api:
-    image: notebookkeeper-api
+services:
+  database:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: notekeeper
+      POSTGRES_USER: notekeeper
+      POSTGRES_PASSWORD: notekeeper_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - notekeeper-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U notekeeper -d notekeeper"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
     build:
       context: .
-      dockerfile: NoteBookKeeper.Api/Dockerfile
-    ports:
-      - "5000:8080"
+      dockerfile: Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=NoteBookKeeperDb;User=sa;Password=REDACTED_PASSWORD
-      - MinioEndpoint=http://minio:9000
-      - MinioAccessKey=AmirTahan80
-      - MinioSecretKey=REDACTED_PASSWORD
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: Host=database;Port=5432;Database=notekeeper;Username=notekeeper;Password=notekeeper_dev
+      Jwt__Key: local-docker-development-key-change-me-12345678901234567890
+      Jwt__Issuer: NoteKeeper
+      Jwt__Audience: NoteKeeper
+    ports:
+      - "8080:10000"
     depends_on:
-      - sqlserver
-      - minio
-  
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:latest
-    environment:
-      - SA_PASSWORD=REDACTED_PASSWORD
-      - ACCEPT_EULA=Y
-    ports:
-      - "1433:1433"
-    volumes:
-      - sqlserver-data:/var/opt/mssql
-
-  minio:
-    image: minio/minio
-    command: server /data
-    environment:
-      - MINIO_ROOT_USER=AmirTahan80
-      - MINIO_ROOT_PASSWORD=REDACTED_PASSWORD
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    volumes:
-      - minio-data:/var/opt/minio-files
-
-  nginx:
-    image: nginx:alpine
-    volumes:
-      - type: bind
-        source: ./nginx.conf
-        target: /etc/nginx/nginx.conf
-        read_only: true
-    ports:
-      - "80:80"
-    depends_on:
-      - notebookkeeper.api
+      database:
+        condition: service_healthy
 
 volumes:
-    sqlserver-data:
-    minio-data:
+  notekeeper-data:

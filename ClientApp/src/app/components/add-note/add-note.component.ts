@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ApiService } from '../../services/base.api';
 import { ApiUrlSettings } from '../../environmets/ApiSettings';
@@ -36,7 +36,7 @@ interface NewNote {
     MatButtonModule,
     MatChipsModule,
     MatIconModule,
-    CKEditorModule
+    MatTooltipModule
   ],
   templateUrl: './add-note.component.html',
   styleUrls: ['./add-note.component.scss']

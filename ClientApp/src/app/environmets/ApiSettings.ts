@@ -1,5 +1,5 @@
 export class ApiBaseSettings{
-    baseUrl ="http://localhost:5220/api";
+    baseUrl ="/api";
 }
 
 export class ApiUrlSettings{

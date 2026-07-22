@@ -1,0 +1,27 @@
+databases:
+  - name: notekeeper-db
+    plan: free
+    databaseName: notekeeper
+    user: notekeeper
+
+services:
+  - type: web
+    name: notekeeper
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: notekeeper-db
+          property: connectionString
+      - key: Jwt__Key
+        generateValue: true
+      - key: Jwt__Issuer
+        value: NoteKeeper
+      - key: Jwt__Audience
+        value: NoteKeeper
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production

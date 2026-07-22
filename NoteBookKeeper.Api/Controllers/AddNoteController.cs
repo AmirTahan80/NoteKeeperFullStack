@@ -1,5 +1,4 @@
-﻿using Amazon.S3;
-using Amazon.S3.Model;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,184 +6,198 @@ using NoteBookKeeper.Api.Db;
 using NoteBookKeeper.Api.Entities;
 using NoteBookKeeper.Api.Models;
 using NoteBookKeeper.Api.Models.Base;
-using System.Security.Claims;
 
-namespace NoteBookKeeper.Api.Controllers
+namespace NoteBookKeeper.Api.Controllers;
+
+[ApiController]
+[Authorize]
+[Route("api/[controller]")]
+public class AddNoteController(NoteKeeperContext context) : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AddNoteController(NoteKeeperContext ctx, IAmazonS3 amazonS3) : ControllerBase
+    private const long MaxFileSize = 5 * 1024 * 1024;
+    private const int MaxFileCount = 5;
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> CreateNoteSetting(CreateNoteSettingDto request)
     {
-        [HttpPost("[action]")]
-        [Authorize]
-        public async Task<IActionResult> CreateNoteSetting([FromBody] CreateNoteSettingDto request)
+        var noteSetting = new NoteSetting
         {
+            Topic = request.Topic.Trim(),
+            Description = request.Description?.Trim(),
+            UserId = GetUserId(),
+            Uuid = Guid.NewGuid()
+        };
 
-            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var newNoteSetting = new NoteSetting
-            {
-                Topic = request.Topic,
-                Description = request.Description,
-                UserId = userId,
-                Uuid = Guid.NewGuid()
-            };
-            await ctx.NoteSettings.AddAsync(newNoteSetting);
-            await ctx.SaveChangesAsync();
-            return NoContent();
+        context.NoteSettings.Add(noteSetting);
+        await context.SaveChangesAsync();
+        return NoContent();
+    }
+
+    [HttpPost("[action]")]
+    [RequestSizeLimit(26 * 1024 * 1024)]
+    public async Task<IActionResult> CreateNoteItem([FromForm] CreateNoteItemDto request)
+    {
+        var userId = GetUserId();
+        var setting = await context.NoteSettings
+            .Where(setting => setting.Uuid == request.NoteSettingId && setting.UserId == userId)
+            .Select(setting => new { setting.Id })
+            .SingleOrDefaultAsync();
+
+        if (setting is null)
+        {
+            return NotFound(new ProblemDetails { Title = "سرفصل یافت نشد." });
         }
 
-        [HttpPost("[action]")]
-        [Authorize]
-        public async Task<IActionResult> CreateNoteItem([FromForm] CreateNoteItemDto request)
+        if (request.Files.Count > MaxFileCount || request.Files.Any(file => file.Length > MaxFileSize))
         {
-            var setting = await ctx.NoteSettings
-                .Select(p => new { p.Uuid, p.Id })
-                .FirstOrDefaultAsync(p => p.Uuid == request.NoteSettingId);
-
-            if (setting is null)
+            return BadRequest(new ProblemDetails
             {
-                return NotFound("سرفصل شما یافت نشد");
-            }
+                Title = $"حداکثر {MaxFileCount} فایل و حداکثر ۵ مگابایت برای هر فایل مجاز است."
+            });
+        }
 
-            var newNoteItem = new NoteItem()
+        var noteItem = new NoteItem
+        {
+            RedirectLink = string.IsNullOrWhiteSpace(request.RedirectLink) ? null : request.RedirectLink.Trim(),
+            Uuid = Guid.NewGuid(),
+            NoteSettingId = setting.Id,
+            Detail = request.Detail.Trim(),
+            SearchWords = string.Join(',', request.SearchWords
+                .Select(word => word.Trim())
+                .Where(word => word.Length > 0)
+                .Distinct(StringComparer.OrdinalIgnoreCase))
+        };
+
+        foreach (var file in request.Files.Where(file => file.Length > 0))
+        {
+            await using var stream = new MemoryStream();
+            await file.CopyToAsync(stream, HttpContext.RequestAborted);
+            noteItem.Files.Add(new NoteItemFile
             {
-                RedirectLink = request.RedirectLink,
                 Uuid = Guid.NewGuid(),
-                NoteSettingId = setting.Id,
-                Detail = request.Detail,
-                SearchWords = request.SearchWords
-            };
-            await ctx.NoteItems.AddAsync(newNoteItem);
-            await ctx.SaveChangesAsync();
-            if (request.Files is { Count: > 0 })
+                FileName = Path.GetFileName(file.FileName),
+                ContentType = string.IsNullOrWhiteSpace(file.ContentType)
+                    ? "application/octet-stream"
+                    : file.ContentType,
+                Content = stream.ToArray()
+            });
+        }
+
+        context.NoteItems.Add(noteItem);
+        await context.SaveChangesAsync();
+        return NoContent();
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetNotes([FromQuery] BaseRequestDto request)
+    {
+        var pageNumber = Math.Max(request.PageNumber, 1);
+        var pageSize = Math.Clamp(request.PageSize, 1, 50);
+        var query = context.NoteSettings.Where(note => note.UserId == GetUserId());
+
+        if (!string.IsNullOrWhiteSpace(request.Search))
+        {
+            var search = request.Search.Trim();
+            query = query.Where(note =>
+                EF.Functions.ILike(note.Topic, $"%{search}%")
+                || (note.Description != null && EF.Functions.ILike(note.Description, $"%{search}%")));
+        }
+
+        var totalCount = await query.CountAsync();
+        var items = await query
+            .OrderByDescending(note => note.CreationDate)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Select(note => new
             {
-                await UploadObject(request.Files, newNoteItem.Id);
-            }
-            return NoContent();
-        }
+                note.Uuid,
+                note.Topic,
+                note.Description,
+                note.CreationDate
+            })
+            .ToListAsync();
 
-        [Authorize]
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetNotes([FromQuery] BaseRequestDto request)
+        return Ok(new { items, totalCount });
+    }
+
+    [HttpGet("[action]/{noteId:guid}")]
+    public async Task<ActionResult<IReadOnlyList<GetNoteItemsDto>>> GetNoteItems(Guid noteId)
+    {
+        var userId = GetUserId();
+        var noteExists = await context.NoteSettings
+            .AnyAsync(note => note.Uuid == noteId && note.UserId == userId);
+        if (!noteExists)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "");
-            var notes = await ctx.NoteSettings
-                .Where(n => n.UserId == userId)
-                .Select(p => new
-                {
-                    p.Uuid,
-                    p.Topic,
-                    p.Description,
-                    p.CreationDate
-                }).ToListAsync();
-
-            return Ok(notes);
+            return NotFound();
         }
 
-        [Authorize]
-        [HttpGet("[action]/{noteId}")]
-        public async Task<IActionResult> GetNoteItems([FromRoute] Guid noteId)
+        var items = await context.NoteItems
+            .Where(item => item.NoteSetting.Uuid == noteId && item.NoteSetting.UserId == userId)
+            .OrderByDescending(item => item.CreationDate)
+            .Select(item => new GetNoteItemsDto(
+                item.RedirectLink,
+                item.Detail,
+                item.SearchWords,
+                item.Uuid,
+                item.Files.Select(file => $"/api/AddNote/File/{file.Uuid}").ToList(),
+                item.CreationDate))
+            .ToListAsync();
+
+        return Ok(items);
+    }
+
+    [HttpGet("[action]/{noteItemId:guid}")]
+    public async Task<ActionResult<GetNoteItemsDto>> GetNoteItemById(Guid noteItemId)
+    {
+        var userId = GetUserId();
+        var item = await context.NoteItems
+            .Where(note => note.Uuid == noteItemId && note.NoteSetting.UserId == userId)
+            .Select(note => new GetNoteItemsDto(
+                note.RedirectLink,
+                note.Detail,
+                note.SearchWords,
+                note.Uuid,
+                note.Files.Select(file => $"/api/AddNote/File/{file.Uuid}").ToList(),
+                note.CreationDate))
+            .SingleOrDefaultAsync();
+
+        return item is null ? NotFound() : Ok(item);
+    }
+
+    [HttpGet("File/{fileId:guid}")]
+    public async Task<IActionResult> GetFile(Guid fileId)
+    {
+        var userId = GetUserId();
+        var file = await context.NoteItemsFiles
+            .Where(file => file.Uuid == fileId && file.NoteItem.NoteSetting.UserId == userId)
+            .Select(file => new { file.Content, file.ContentType, file.FileName })
+            .SingleOrDefaultAsync();
+
+        return file is null
+            ? NotFound()
+            : File(file.Content, file.ContentType, file.FileName, enableRangeProcessing: true);
+    }
+
+    [HttpDelete("[action]/{noteId:guid}")]
+    public async Task<IActionResult> DeleteNote(Guid noteId)
+    {
+        var noteSetting = await context.NoteSettings
+            .SingleOrDefaultAsync(note => note.Uuid == noteId && note.UserId == GetUserId());
+        if (noteSetting is null)
         {
-            var noteItems = await ctx.NoteItems
-                .Where(n => n.NoteSetting.Uuid == noteId)
-                .Select(p => new GetNoteItemsDto(
-                    p.RedirectLink,
-                    p.Detail,
-                    p.SearchWords,
-                    p.Uuid,
-                    p.Files.Select(e => $"http://localhost:9000/{e.FilePath}/{e.FileName}").ToList(),
-                    p.CreationDate))
-                .ToListAsync();
-            return Ok(noteItems);
+            return NotFound(new ProblemDetails { Title = "نوت موردنظر یافت نشد." });
         }
 
-        [Authorize]
-        [HttpGet("[action]/{noteItemId}")]
-        public async Task<IActionResult> GetNoteItemById([FromRoute] Guid noteItemId)
-        {
-            var noteItem = await ctx.NoteItems.Where(p=> p.Uuid == noteItemId)
-                .Select(p => new GetNoteItemsDto(
-                    p.RedirectLink,
-                    p.Detail,
-                    p.SearchWords,
-                    p.Uuid,
-                    p.Files.Select(e => $"http://localhost:9000/{e.FilePath}/{e.FileName}").ToList(),
-                    p.CreationDate))
-                .FirstOrDefaultAsync();
-            return Ok(noteItem);
-        }
+        noteSetting.IsDeleted = true;
+        await context.SaveChangesAsync();
+        return NoContent();
+    }
 
-        [Authorize]
-        [HttpDelete("[action]/{NoteId}")]
-        public async Task<IActionResult> DeleteNote([FromRoute] Guid NoteId)
-        {
-            var noteSetting = await ctx.NoteSettings.FirstOrDefaultAsync(p => p.Uuid == NoteId);
-            if (noteSetting is null)
-                return NotFound("نوت مورد نظر یافت نشد");
-            noteSetting.IsDeleted = true;
-            await ctx.SaveChangesAsync();
-            return Ok(true);
-        }
-
-
-        private async Task UploadObject(ICollection<IFormFile> files, long noteId)
-        {
-            try
-            {
-                await amazonS3.EnsureBucketExistsAsync("note-items-files");
-            }
-            catch
-            {
-                // ignored
-            }
-
-            var newFiles = new List<NoteItemFile>();
-
-            foreach (var formFile in files)
-            {
-                var name = "public-photos-" + Guid.NewGuid() + "." + formFile.FileName.Split('.').Last();
-                var putObjectRequest = new PutObjectRequest()
-                {
-                    BucketName = "note-items-files",
-                    Key = name,
-                    InputStream = formFile.OpenReadStream(),
-
-                };
-                var pushObject = await amazonS3
-                    .PutObjectAsync(putObjectRequest).ConfigureAwait(false);
-
-                newFiles.Add(new()
-                {
-                    FileName = name,
-                    FilePath = putObjectRequest.BucketName,
-                    NoteItemId = noteId
-                });
-            }
-
-            await ctx.NoteItemsFiles.AddRangeAsync(newFiles);
-            await ctx.SaveChangesAsync();
-        }
-
-        //private async Task GetObject()
-        //{
-        //    var objectGet = new GetObjectRequest()
-        //    {
-        //        Key = "Screenshot 2024-01-27 124727.png",
-        //        BucketName = "note-items-files",
-        //        EtagToMatch = "a48d6699f8ea05984da00ab8cbe6492f"
-        //    };
-        //    var image = await amazonS3.GetObjectAsync(objectGet);
-        //    string base64 = "";
-
-        //    using (MemoryStream responseStream = new MemoryStream())
-        //    {
-        //        image.ResponseStream.CopyTo(responseStream);
-        //        var bytes = responseStream.ToArray();
-        //        base64 = Convert.ToBase64String(bytes);
-        //    }
-
-        //    int a = 2;
-        //    image.Dispose();
-        //}
+    private Guid GetUserId()
+    {
+        var value = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return Guid.TryParse(value, out var userId)
+            ? userId
+            : throw new UnauthorizedAccessException("The access token does not contain a valid user identifier.");
     }
 }

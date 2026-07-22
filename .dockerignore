@@ -8,6 +8,9 @@
 **/.vs
 **/.vscode
 **/.idea
+**/.angular
+**/dist
+**/coverage
 **/*.*proj.user
 **/*.dbmdl
 **/*.jfm
@@ -23,3 +26,5 @@
 **/values.dev.yaml
 LICENSE
 README.md
+.github
+scripts

@@ -91,13 +91,11 @@ export class NoteListComponent implements OnInit {
       search: this.searchTerm
     }
 
-    this.apiService.get<GetNotesDto[]>(this.apiSettings.getNoteSettings,body)
+    this.apiService.get<PagedResponse<GetNotesDto>>(this.apiSettings.getNoteSettings,body)
     .subscribe({
         next: (response) => {
-          this.notes = response;
-          console.log(this.notes);
-          console.log(this.notes);
-          this.totalItems = 100;
+          this.notes = response.items;
+          this.totalItems = response.totalCount;
           this.loading = false;
         },
         error: (error) => {
@@ -114,4 +112,9 @@ class GetNotesDto
   topic='';
   description='';
   creationDate='';
+}
+
+interface PagedResponse<T> {
+  items: T[];
+  totalCount: number;
 }

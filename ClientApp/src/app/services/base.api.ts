@@ -27,7 +27,7 @@ export class ApiService {
       params,
       headers: headers
     };
-    return this.http.get<T>(`${this.baseUrl}${url}`, httpOptions);
+    return this.http.get<T>(this.getUrl(url), httpOptions);
   }
 
   post<T>(url: string, params: any, contentType='application/json') {
@@ -43,7 +43,7 @@ export class ApiService {
         'Bearer ' + this.authentication.GetToken()
       );
     }
-    return this.http.post<T>(`${this.baseUrl}${url}`, params, {headers:headers});
+    return this.http.post<T>(this.getUrl(url), params, {headers:headers});
   }
 
   put<T>(url: string, params: any) {
@@ -55,7 +55,7 @@ export class ApiService {
         'Bearer ' + this.authentication.GetToken()
       );
     }
-    return this.http.put<T>(`${this.baseUrl}${url}`, params);
+    return this.http.put<T>(this.getUrl(url), params, {headers:headers});
   }
 
   delete<T>(url: string) {
@@ -67,6 +67,19 @@ export class ApiService {
         'Bearer ' + this.authentication.GetToken()
       );
     }
-    return this.http.delete<T>(`${this.baseUrl}${url}`, {headers:headers});
+    return this.http.delete<T>(this.getUrl(url), {headers:headers});
+  }
+
+  getBlob(url: string) {
+    let headers = new HttpHeaders();
+    if (this.authentication.IsUserLogin()) {
+      headers = headers.set('Authorization', 'Bearer ' + this.authentication.GetToken());
+    }
+
+    return this.http.get(this.getUrl(url), { headers, responseType: 'blob' });
+  }
+
+  private getUrl(url: string): string {
+    return url.startsWith('/api/') ? url : `${this.baseUrl}${url}`;
   }
 }

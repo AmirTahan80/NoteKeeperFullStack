@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace NoteBookKeeper.Api.Entities;
 
-public class BaseEntity<Tkeyt> where Tkeyt : struct
+public class BaseEntity<TKey> where TKey : struct
 {
     [Key]
-    public Tkeyt Id { get; set; }
-    public DateTime CreationDate { get; set; }=DateTime.Now;
-    public bool IsDeleted { get; set; } = false;
+    public TKey Id { get; set; }
+    public DateTime CreationDate { get; set; } = DateTime.UtcNow;
+    public bool IsDeleted { get; set; }
 }
