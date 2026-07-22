@@ -1,0 +1,38 @@
+<!-- circular-nav.component.html -->
+<div class="nav-container" 
+     [@menuContainer]="isMenuVisible ? 'visible' : 'void'" 
+     *ngIf="isMenuVisible">
+
+  <!-- Active Menu Item -->
+  <div class="menu-display">
+    <div class="active-menu" 
+         [style.transform]="'rotate(' + currentRotation + 'deg)'"
+         (click)="navigateToRoute()">
+      <div class="menu-circle" 
+           [style.transform]="'rotate(' + (-currentRotation) + 'deg)'">
+        {{ menuItems[activeIndex].label }}
+      </div>
+      <!-- Navigation Marker -->
+      <div class="nav-marker" 
+           [style.transform]="'rotate(' + (-currentRotation) + 'deg)'">
+      </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+      <button class="nav-btn" (click)="navigate('right')">
+        <span>→</span>
+      </button>
+      <button class="nav-btn" (click)="navigate('left')">
+        <span>←</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toggle Button when menu is hidden -->
+<button class="menu-toggle" 
+        (click)="toggleMenu()">
+  <span *ngIf="!isMenuVisible"  class="menu-icon">≡</span>
+  <span *ngIf="isMenuVisible"  class="menu-icon">✕</span>
+</button>
