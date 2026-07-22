@@ -1,0 +1,23 @@
+<!-- filepath: /d:/Projects/Private/NoteBookKeeper/Client/NoteKeeper/src/app/authentication/login/login.component.html -->
+<div class="login-container" dir="rtl">
+    <mat-card class="login-card">
+        <mat-card-header>
+            <mat-card-title>ورود به سایت</mat-card-title> <mat-card-title>اکانت ندارید؟ <a href="/sign-up"> ثبت نام کنید</a></mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form class="login-form" (ngSubmit)="login()" style="margin-top: 2rem;">
+                <mat-form-field appearance="fill">
+                    <mat-label>نام کاربری</mat-label>
+                    <input matInput [(ngModel)]="userName" name="username" required>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>رمز عبور</mat-label>
+                    <input matInput [(ngModel)]="password" name="password" type="password" required>
+                </mat-form-field>
+                <button mat-raised-button color="primary" type="submit">
+                    ثبت نام
+                </button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

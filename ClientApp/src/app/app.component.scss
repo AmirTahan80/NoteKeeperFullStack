@@ -1,0 +1,43 @@
+// styles.scss
+@use '@angular/material' as mat;
+
+// Custom Snackbar Styles
+.success-snackbar {
+  background: #4caf50;
+  color: white;
+  
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
+
+.error-snackbar {
+  background: #f44336;
+  color: white;
+  
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
+
+// RTL & Font setup
+* {
+  font-family: Vazir, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+// Material theme setup
+.mat-typography {
+  font-family: Vazir, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+// Material Components RTL setup
+[dir='rtl'] {
+  .mat-form-field-appearance-outline {
+    .mat-form-field-outline-start {
+      border-radius: 0 4px 4px 0;
+    }
+    .mat-form-field-outline-end {
+      border-radius: 4px 0 0 4px;
+    }
+  }
+}

@@ -1,0 +1,76 @@
+<!-- note-detail.component.html -->
+<div class="note-container" *ngIf="!loading; else loadingTpl">
+    <ng-container *ngIf="!error; else errorTpl">
+        <ng-container *ngIf="noteItem">
+            <!-- header section -->
+            <div class="header-section">
+                <div class="search-tags">
+                    <span *ngFor="let word of getSearchWordsArray()" 
+                          class="tag">
+                        <i class="fas fa-search"></i>
+                        {{ word }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- main content -->
+            <div class="content-grid">
+                <!-- date section -->
+                <div class="card date-card">
+                    <div class="date-content">
+                        <i class="fas fa-calendar"></i>
+                        <div class="date-text">
+                            <p class="label">تاریخ ایجاد</p>
+                            <p class="value">{{ getPersianDate() }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- detail section -->
+                <div class="card detail-card">
+                    <div class="detail-text" [innerHTML]="noteItem.detail"></div>
+                    <div *ngIf="noteItem.redirectLink" class="link-section">
+                        <i class="fas fa-link"></i>
+                        <a [href]="noteItem.redirectLink" target="_blank" rel="noopener noreferrer">
+                            لینک مرتبط
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- files grid -->
+            <div class="files-section">
+                <h3 class="section-title">فایل‌های پیوست شده</h3>
+                <div class="files-grid">
+                    <div *ngFor="let fileUrl of noteItem.filePaths; let i = index"
+                         class="file-item">
+                        
+                        <ng-container>
+                            <img [src]="fileUrl" [alt]="'فایل ' + (i + 1)">
+                        </ng-container>
+
+                        <ng-template #fileDownload>
+                            <div class="download-button">
+                                <a [href]="fileUrl" target="_blank" rel="noopener noreferrer">
+                                    دانلود فایل
+                                </a>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+</div>
+
+<ng-template #loadingTpl>
+    <div class="loading-container">
+        <mat-spinner diameter="48"></mat-spinner>
+    </div>
+</ng-template>
+
+<ng-template #errorTpl>
+    <div class="error-container">
+        {{ error }}
+    </div>
+</ng-template>

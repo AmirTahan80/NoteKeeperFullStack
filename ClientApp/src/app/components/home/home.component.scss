@@ -1,0 +1,151 @@
+// home.component.scss
+.home-container {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: #f8f9fa;
+    direction: rtl;
+  }
+  
+  .background-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40vh;
+    background: 
+      linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(0,0,0,0.1) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(0,0,0,0.1) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(0,0,0,0.1) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    opacity: 0.1;
+  }
+  
+  .content-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .header-section {
+    text-align: center;
+    margin-bottom: 4rem;
+    
+    .main-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+  
+    .subtitle {
+      font-size: 1.25rem;
+      color: #4a5568;
+      margin-bottom: 0.5rem;
+    }
+  
+    .extra-text {
+      font-size: 1.1rem;
+      color: #718096;
+    }
+  }
+  
+  .welcome-section {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    
+    .welcome-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 1rem;
+    }
+  
+    .welcome-description {
+      font-size: 1.1rem;
+      color: #4a5568;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+  }
+  
+  .new-note-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background: #000;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    
+    .btn-text {
+      font-weight: 500;
+    }
+  
+    .btn-icon {
+      transition: transform 0.3s ease;
+    }
+  
+    &:hover {
+      background: #1a1a1a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
+      .btn-icon {
+        transform: translateX(-5px);
+      }
+    }
+  }
+  
+  // Responsive Design
+  @media (max-width: 768px) {
+    .content-container {
+      padding: 2rem 1rem;
+    }
+  
+    .header-section {
+      .main-title {
+        font-size: 2rem;
+      }
+  
+      .subtitle {
+        font-size: 1.1rem;
+      }
+    }
+  
+    .welcome-section {
+      padding: 1.5rem;
+      
+      .welcome-title {
+        font-size: 1.5rem;
+      }
+  
+      .welcome-description {
+        font-size: 1rem;
+      }
+    }
+  }
+  
+  // Add Persian/Arabic font support
+  @font-face {
+    font-family: 'Vazir';
+    src: url('../../../assets/Vazir.woff2') format('woff2');
+  }
+  
+  :host {
+    font-family: 'Vazir', system-ui, -apple-system, sans-serif;
+  }

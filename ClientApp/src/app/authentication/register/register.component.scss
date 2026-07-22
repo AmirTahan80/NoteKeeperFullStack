@@ -1,0 +1,36 @@
+// filepath: /d:/Projects/Private/NoteBookKeeper/Client/NoteKeeper/src/app/authentication/register/register.component.scss
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #e0e0e0; /* Warm background color */
+}
+
+.register-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff; /* Warm card color */
+    border-radius: 5%;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    margin-top: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.5s ease-in-out; /* Ensure smooth transition */
+}
+
+button:hover {
+    background-color: #0441b3; /* Warm hover color */
+}

@@ -1,10 +1,19 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel.DataAnnotations;
 
 namespace NoteBookKeeper.Api.Models;
 
-public record CreateNoteItemDto(
-    [AllowNull] string? Detail,
-    string? SearchWords,
-    string? RedirectLink,
-    ICollection<IFormFile>? Files,
-    Guid NoteSettingId);
+public sealed class CreateNoteItemDto
+{
+    [Required]
+    public string Detail { get; set; } = string.Empty;
+
+    public List<string> SearchWords { get; set; } = [];
+
+    [Url]
+    public string? RedirectLink { get; set; }
+
+    public ICollection<IFormFile> Files { get; set; } = [];
+
+    [Required]
+    public Guid NoteSettingId { get; set; }
+}

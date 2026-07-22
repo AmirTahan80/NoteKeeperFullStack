@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ClientApp/package-lock.json
+
+      - name: Build Angular client
+        working-directory: ClientApp
+        run: |
+          npm ci
+          npm run build
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build ASP.NET Core API
+        run: dotnet build NoteBookKeeper.sln --configuration Release
+
+      - name: Build production image
+        run: docker build --tag notekeeper:ci .
