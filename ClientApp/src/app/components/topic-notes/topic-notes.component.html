@@ -3,11 +3,11 @@
     <!-- Header -->
     <div class="header">
       <button mat-icon-button routerLink="/note-list">
-        <mat-icon>arrow_forward</mat-icon>
+        <mat-icon>arrow_back</mat-icon>
       </button>
       <button mat-flat-button color="primary" [routerLink]="['/new-note-item/',topicId]">
         <mat-icon>add</mat-icon>
-        جزوه جدید
+        New note
       </button>
       <h1>{{ topicName }}</h1>
     </div>
@@ -32,8 +32,8 @@
         
         <mat-card-actions align="end">
           <button mat-button color="primary" [routerLink]="['/app-note-detail/',note.uuid]">
-            جزئیات
-            <mat-icon>chevron_left</mat-icon>
+            Details
+            <mat-icon>chevron_right</mat-icon>
           </button>
         </mat-card-actions>
       </mat-card>
@@ -45,7 +45,7 @@
   
       <!-- Empty State -->
       <div *ngIf="!loading && notes.length === 0" class="empty-state">
-        <p>هیچ نوتی برای این موضوع یافت نشد</p>
+        <p>No notes were found in this category.</p>
       </div>
     </div>
   </div>

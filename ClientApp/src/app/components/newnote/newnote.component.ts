@@ -94,9 +94,10 @@ export class NewNoteComponent implements OnInit {
             }
           },
           error:(err)=>{
-            if(err.status == 401)
+            this.isLoading = false;
+            if(err.status !== 401)
             {
-              this.router.navigate(['sign-in'])
+              this.showErrorMessage();
             }
             console.log(err);
           }
@@ -110,20 +111,19 @@ export class NewNoteComponent implements OnInit {
   }
 
   private showSuccessMessage(): void {
-    this.snackBar.open('نوت با موفقیت ذخیره شد', 'باشه', {
+    this.isLoading = false;
+    this.snackBar.open('Category created successfully.', 'OK', {
       duration: 3000,
       horizontalPosition: 'start',
-      direction: 'rtl',
       panelClass: 'success-snackbar'
     });
     this.router.navigate(['note-list'])
   }
 
   private showErrorMessage(): void {
-    this.snackBar.open('خطا در ذخیره نوت', 'تلاش مجدد', {
+    this.snackBar.open('Could not create the category.', 'Try again', {
       duration: 5000,
       horizontalPosition: 'start',
-      direction: 'rtl',
       panelClass: 'error-snackbar'
     });
   }

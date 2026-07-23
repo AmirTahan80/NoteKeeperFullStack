@@ -63,11 +63,6 @@
     }
   }
   
-  // RTL Support
-  :host {
-    direction: rtl;
-  }
-  
   // Responsive Design
   @media (max-width: 768px) {
     .create-note-container {

@@ -1,45 +1,45 @@
 # NoteKeeper
 
-یک اپلیکیشن تحت وب برای ساخت، دسته‌بندی و جست‌وجوی یادداشت‌ها. این مخزن نسخه یکپارچه‌ی پروژه‌های `NoteKeeperFront` و `NoteKeeperBack` است و تاریخچه Git هر دو پروژه را حفظ می‌کند.
+A web application for creating, organizing, and searching notes. This repository combines `NoteKeeperFront` and `NoteKeeperBack` while preserving the Git history of both projects.
 
 [![CI](https://github.com/AmirTahan80/NoteKeeperFullStack/actions/workflows/ci.yml/badge.svg)](https://github.com/AmirTahan80/NoteKeeperFullStack/actions/workflows/ci.yml)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/AmirTahan80/NoteKeeperFullStack)
 
-## امکانات
+## Features
 
-- ثبت‌نام و ورود با JWT و password hashing استاندارد ASP.NET Core
-- ساخت موضوع و یادداشت با جست‌وجو، صفحه‌بندی و فایل پیوست
-- کنترل دسترسی کامل؛ هر کاربر فقط یادداشت‌ها و فایل‌های خودش را می‌بیند
-- Angular 22 و ASP.NET Core روی .NET 10 در یک سرویس وب
-- PostgreSQL و migration خودکار EF Core
-- Docker، Docker Compose، Render Blueprint و GitHub Actions
+- Registration and sign-in with JWT and standard ASP.NET Core password hashing
+- Categories and notes with search, pagination, and file attachments
+- Complete access isolation so users can only view their own notes and files
+- Angular 22 and ASP.NET Core on .NET 10 in a single web service
+- PostgreSQL with automatic EF Core migrations
+- Docker, Docker Compose, Render Blueprint, and GitHub Actions
 
-## اجرای سریع با Docker
+## Quick start with Docker
 
-پیش‌نیاز: Docker Desktop
+Prerequisite: Docker Desktop
 
 ```powershell
 docker compose up --build
 ```
 
-سپس [http://localhost:8080](http://localhost:8080) را باز کنید. برای توقف:
+Then open [http://localhost:8080](http://localhost:8080). To stop the application:
 
 ```powershell
 docker compose down
 ```
 
-داده‌ها در volume محلی `notekeeper-data` باقی می‌مانند. برای حذف داده‌های محلی نیز می‌توانید آگاهانه `docker compose down -v` را اجرا کنید.
+Data persists in the local `notekeeper-data` volume. To intentionally remove the local data, run `docker compose down -v`.
 
-## اجرای توسعه‌ای
+## Development
 
-ابتدا PostgreSQL را بالا بیاورید:
+Start PostgreSQL first:
 
 ```powershell
 docker compose up database -d
 dotnet run --project NoteBookKeeper.Api
 ```
 
-در ترمینال دوم:
+In a second terminal:
 
 ```powershell
 cd ClientApp
@@ -47,9 +47,9 @@ npm ci
 npm start
 ```
 
-Angular در [http://localhost:4200](http://localhost:4200) اجرا می‌شود و درخواست‌های `/api` را به ASP.NET Core می‌فرستد.
+Angular runs at [http://localhost:4200](http://localhost:4200) and proxies `/api` requests to ASP.NET Core.
 
-## تست و بررسی build
+## Build and test
 
 ```powershell
 dotnet build NoteBookKeeper.sln -c Release
@@ -62,15 +62,15 @@ cd ..
 docker build -t notekeeper:local .
 ```
 
-پس از اجرای برنامه، health check در `/api/health` باید `Healthy` برگرداند. یک حساب آزمایشی بسازید، وارد شوید، یک موضوع و یک یادداشت دارای تصویر ایجاد کنید و در مرورگر دیگری مطمئن شوید فایل بدون توکن قابل دریافت نیست.
+After starting the application, `/api/health` should return `Healthy`. Create a test account, sign in, create a category and a note with an image, and verify in another browser that the file cannot be downloaded without a token.
 
-## استقرار روی Render
+## Deploy to Render
 
-فایل `render.yaml` یک web service و PostgreSQL می‌سازد. دکمه **Deploy to Render** را بزنید، وارد Render شوید و Blueprint را تأیید کنید. مقدار JWT به‌صورت خودکار و امن تولید می‌شود.
+The `render.yaml` file provisions a web service and PostgreSQL database. Select **Deploy to Render**, sign in to Render, and confirm the Blueprint. A secure JWT key is generated automatically.
 
-> پلن رایگان Render برای دمو مناسب است، اما دیتابیس رایگان آن دائمی نیست. برای نمونه‌کار بلندمدت، دیتابیس را به پلن پولی ارتقا دهید یا `DATABASE_URL` را به یک PostgreSQL پایدار متصل کنید.
+> Render's free plan is suitable for demos, but its free database is not permanent. For a long-lived portfolio project, upgrade the database or connect `DATABASE_URL` to a persistent PostgreSQL instance.
 
-## ساختار پروژه
+## Project structure
 
 ```text
 ClientApp/             Angular frontend
@@ -80,6 +80,6 @@ docker-compose.yml     Local web app + PostgreSQL
 render.yaml            One-click cloud blueprint
 ```
 
-## نکته امنیتی
+## Security note
 
-در مخازن قدیمی اطلاعات نمونه‌ای داخل history ثبت شده بود. نسخه جدید هیچ secret واقعی را commit نمی‌کند، اما اگر هر کدام از مقادیر قدیمی در محیط واقعی استفاده شده‌اند باید آن‌ها را rotate کنید؛ پاک‌کردن فایل فعلی، history قبلی Git را پاک نمی‌کند.
+The original repositories contained sample configuration values in their history. The current version does not commit real secrets. If any historical value was used in a real environment, rotate it because removing it from the current files does not remove it from Git history.

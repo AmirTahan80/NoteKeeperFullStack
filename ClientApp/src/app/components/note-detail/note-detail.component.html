@@ -20,8 +20,8 @@
                     <div class="date-content">
                         <i class="fas fa-calendar"></i>
                         <div class="date-text">
-                            <p class="label">تاریخ ایجاد</p>
-                            <p class="value">{{ getPersianDate() }}</p>
+                            <p class="label">Created</p>
+                            <p class="value">{{ getFormattedDate() }}</p>
                         </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                     <div *ngIf="noteItem.redirectLink" class="link-section">
                         <i class="fas fa-link"></i>
                         <a [href]="noteItem.redirectLink" target="_blank" rel="noopener noreferrer">
-                            لینک مرتبط
+                            Related link
                         </a>
                     </div>
                 </div>
@@ -40,19 +40,19 @@
 
             <!-- files grid -->
             <div class="files-section">
-                <h3 class="section-title">فایل‌های پیوست شده</h3>
+                <h3 class="section-title">Attachments</h3>
                 <div class="files-grid">
                     <div *ngFor="let fileUrl of noteItem.filePaths; let i = index"
                          class="file-item">
                         
                         <ng-container>
-                            <img [src]="fileUrl" [alt]="'فایل ' + (i + 1)">
+                            <img [src]="fileUrl" [alt]="'Attachment ' + (i + 1)">
                         </ng-container>
 
                         <ng-template #fileDownload>
                             <div class="download-button">
                                 <a [href]="fileUrl" target="_blank" rel="noopener noreferrer">
-                                    دانلود فایل
+                                    Download file
                                 </a>
                             </div>
                         </ng-template>

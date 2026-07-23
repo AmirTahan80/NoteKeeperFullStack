@@ -83,5 +83,5 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
   ]
 })
 export class LoadingOverlayComponent {
-  @Input() message = 'در حال پردازش...';
+  @Input() message = 'Processing...';
 }

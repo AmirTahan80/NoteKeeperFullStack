@@ -36,11 +36,11 @@ export class NavigationComponent {
   isMenuVisible = false;
   currentRotation = 0;
   menuItems = [
-    { label: 'خانه', route: '/home' },
-    { label: 'نوت‌ها', route: '/note-list' },
-    { label: 'نوت جدید', route: '/new-note' },
-    { label: 'لاگین', route: '/sign-in' },
-    { label: 'ثبت نام', route: '/sign-up' }
+    { label: 'Home', route: '/home' },
+    { label: 'Notes', route: '/note-list' },
+    { label: 'New category', route: '/new-note' },
+    { label: 'Sign in', route: '/sign-in' },
+    { label: 'Sign up', route: '/sign-up' }
   ];
 
   constructor(

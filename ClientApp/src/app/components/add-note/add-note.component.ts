@@ -76,7 +76,7 @@ export class AddNoteComponent implements OnInit {
 
   formatDoc(command: string) {
     if (command === 'createLink') {
-      const url = prompt('لطفاً URL را وارد کنید:');
+      const url = prompt('Enter a URL:');
       if (url) {
         document.execCommand(command, false, url);
       }
@@ -125,7 +125,7 @@ export class AddNoteComponent implements OnInit {
     if (this.noteForm.valid) {
       if(this.searchWords.length == 0)
       {
-        this.showErrorMessage('کلمات کلیدی نمیتواند خالی باشد');
+        this.showErrorMessage('Add at least one keyword.');
         return;
       }
       this.loading = true;
@@ -142,7 +142,6 @@ export class AddNoteComponent implements OnInit {
         formData.append('files', file);
       });
 
-      // contentType parameter رو حذف کنید
       this.apiService.post(this.baseUrls.createNoteSettingItem, formData)
         .subscribe({
           next: () => {
@@ -159,20 +158,18 @@ export class AddNoteComponent implements OnInit {
 }
 
   private showSuccessMessage(): void {
-    this.snackBar.open('نوت با موفقیت ذخیره شد', 'باشه', {
+    this.snackBar.open('Note saved successfully.', 'OK', {
       duration: 3000,
       horizontalPosition: 'start',
-      direction: 'rtl',
       panelClass: 'success-snackbar'
     });
     this.router.navigate(['note-list'])
   }
 
-  private showErrorMessage(errMsg:string='خطا در ذخیره نوت'): void {
-    this.snackBar.open(errMsg, 'تلاش مجدد', {
+  private showErrorMessage(errMsg:string='Could not save the note.'): void {
+    this.snackBar.open(errMsg, 'Try again', {
       duration: 5000,
       horizontalPosition: 'start',
-      direction: 'rtl',
       panelClass: 'error-snackbar'
     });
   }

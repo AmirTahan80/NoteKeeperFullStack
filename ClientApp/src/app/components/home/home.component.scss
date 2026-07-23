@@ -4,7 +4,6 @@
     position: relative;
     overflow: hidden;
     background: #f8f9fa;
-    direction: rtl;
   }
   
   .background-pattern {
@@ -140,12 +139,6 @@
     }
   }
   
-  // Add Persian/Arabic font support
-  @font-face {
-    font-family: 'Vazir';
-    src: url('../../../assets/Vazir.woff2') format('woff2');
-  }
-  
   :host {
-    font-family: 'Vazir', system-ui, -apple-system, sans-serif;
+    font-family: Roboto, system-ui, -apple-system, sans-serif;
   }

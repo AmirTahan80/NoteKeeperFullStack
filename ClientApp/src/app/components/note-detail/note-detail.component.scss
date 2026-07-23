@@ -229,21 +229,6 @@ $error-text: #dc2626;    // red-600
   }
 }
 
-// RTL Support
-[dir="rtl"] {
-  .content-grid {
-    .date-card {
-      .date-content {
-        flex-direction: row-reverse;
-      }
-    }
-  }
-
-  .link-section {
-    flex-direction: row-reverse;
-  }
-}
-
 // Print Styles
 @media print {
   .note-container {

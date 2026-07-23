@@ -34,12 +34,35 @@ export class AuthenticationModel{
     }
     IsUserLogin()
     {
-        var token = localStorage.getItem("TokenAuth");
-        if(token !== '' && token !== null)
-        {
-            return true;
+        const token = this.GetToken();
+        if (!token) {
+            return false;
         }
-        return false;
+
+        try {
+            const payloadPart = token.split('.')[1];
+            if (!payloadPart) {
+                this.LogOut();
+                return false;
+            }
+
+            const normalizedPayload = payloadPart
+                .replace(/-/g, '+')
+                .replace(/_/g, '/')
+                .padEnd(Math.ceil(payloadPart.length / 4) * 4, '=');
+            const payload = JSON.parse(atob(normalizedPayload));
+            const expiresAt = Number(payload.exp) * 1000;
+
+            if (!Number.isFinite(expiresAt) || expiresAt <= Date.now()) {
+                this.LogOut();
+                return false;
+            }
+
+            return true;
+        } catch {
+            this.LogOut();
+            return false;
+        }
     }
     LogOut()
     {

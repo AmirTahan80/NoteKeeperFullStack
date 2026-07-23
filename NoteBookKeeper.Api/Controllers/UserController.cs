@@ -31,7 +31,7 @@ public class UserController(
         {
             return Unauthorized(new ProblemDetails
             {
-                Title = "نام کاربری یا رمز عبور اشتباه است.",
+                Title = "The username or password is incorrect.",
                 Status = StatusCodes.Status401Unauthorized
             });
         }
@@ -82,7 +82,7 @@ public class UserController(
         {
             return Conflict(new ProblemDetails
             {
-                Title = "نام کاربری یا ایمیل قبلاً استفاده شده است.",
+                Title = "The username or email address is already in use.",
                 Status = StatusCodes.Status409Conflict
             });
         }
