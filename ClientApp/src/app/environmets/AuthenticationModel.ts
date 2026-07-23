@@ -7,9 +7,10 @@ import { Injectable } from "@angular/core";
 export class AuthenticationModel{
     constructor(){}
 
-    Set(validationToken:string)
+    Set(validationToken:string, userName:string)
     {
         localStorage.setItem("TokenAuth", validationToken);
+        localStorage.setItem("PublicUserName", userName);
     }
     GetToken()
     {
@@ -19,11 +20,16 @@ export class AuthenticationModel{
     {
         return localStorage.getItem("RefreshAuth");
     }
+    GetUserName()
+    {
+        return localStorage.getItem("PublicUserName");
+    }
     GetAll()
     {
         var token= localStorage.getItem("TokenAuth");
         return {
-            token: token
+            token: token,
+            userName: this.GetUserName()
         }
     }
     IsUserLogin()
@@ -37,6 +43,8 @@ export class AuthenticationModel{
     }
     LogOut()
     {
-        localStorage.clear();
+        localStorage.removeItem("TokenAuth");
+        localStorage.removeItem("RefreshAuth");
+        localStorage.removeItem("PublicUserName");
     }
 }

@@ -46,7 +46,7 @@ export class LoginComponent {
     this.clientService
     .post<LoginResponseDto>(this.baseUrl.signIn, content_).subscribe({
       next:(value)=>{
-        this.authenticationModel.Set(value.token);
+        this.authenticationModel.Set(value.token, value.userName);
         this.router.navigate(['/'])
       },
       error:(err)=>{
@@ -64,4 +64,5 @@ class LoginUserDto {
 
 class LoginResponseDto{
   token=''
+  userName=''
 }
