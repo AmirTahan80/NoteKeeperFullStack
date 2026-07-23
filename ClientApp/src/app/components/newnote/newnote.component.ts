@@ -94,9 +94,10 @@ export class NewNoteComponent implements OnInit {
             }
           },
           error:(err)=>{
-            if(err.status == 401)
+            this.isLoading = false;
+            if(err.status !== 401)
             {
-              this.router.navigate(['sign-in'])
+              this.showErrorMessage();
             }
             console.log(err);
           }
@@ -110,6 +111,7 @@ export class NewNoteComponent implements OnInit {
   }
 
   private showSuccessMessage(): void {
+    this.isLoading = false;
     this.snackBar.open('نوت با موفقیت ذخیره شد', 'باشه', {
       duration: 3000,
       horizontalPosition: 'start',

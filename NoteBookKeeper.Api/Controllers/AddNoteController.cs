@@ -20,11 +20,22 @@ public class AddNoteController(NoteKeeperContext context) : ControllerBase
     [HttpPost("[action]")]
     public async Task<IActionResult> CreateNoteSetting(CreateNoteSettingDto request)
     {
+        var userId = GetUserId();
+        var userExists = await context.Users.AnyAsync(user => user.Id == userId);
+        if (!userExists)
+        {
+            return Unauthorized(new ProblemDetails
+            {
+                Title = "Your session is no longer linked to an active user. Please sign in again.",
+                Status = StatusCodes.Status401Unauthorized
+            });
+        }
+
         var noteSetting = new NoteSetting
         {
             Topic = request.Topic.Trim(),
             Description = request.Description?.Trim(),
-            UserId = GetUserId(),
+            UserId = userId,
             Uuid = Guid.NewGuid()
         };
 

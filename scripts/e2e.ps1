@@ -158,6 +158,29 @@ try {
         if ($_.Exception.Response.StatusCode.value__ -ne 404) { throw }
     }
 
+    $deleteStaleUserSql = "DO `$`$ BEGIN EXECUTE format('DELETE FROM %I WHERE %I = %L', 'Users', 'NormalizedUserName', '$($secondUser.ToUpperInvariant())'); END `$`$;"
+    & (Join-Path $postgresBin 'psql.exe') `
+        -h 127.0.0.1 `
+        -p $PostgresPort `
+        -U notekeeper `
+        -d notekeeper `
+        -c $deleteStaleUserSql | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw 'Could not prepare the stale-session check.' }
+
+    try {
+        Invoke-WebRequest `
+            "$baseUrl/api/AddNote/CreateNoteSetting" `
+            -Method Post `
+            -Headers $otherHeaders `
+            -ContentType 'application/json' `
+            -Body $topicBody `
+            -UseBasicParsing | Out-Null
+        throw 'A token for a missing user was accepted.'
+    }
+    catch {
+        if ($_.Exception.Response.StatusCode.value__ -ne 401) { throw }
+    }
+
     [PSCustomObject]@{
         Health = 'Healthy'
         Angular = 'Served'
@@ -166,6 +189,7 @@ try {
         PublicProfilePrivacy = 'Passed'
         NoteAndAttachment = 'Passed'
         OwnershipIsolation = 'Passed'
+        StaleSessionHandling = 'Passed'
     } | Format-List
 }
 catch {
