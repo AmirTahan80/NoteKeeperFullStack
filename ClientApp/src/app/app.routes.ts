@@ -8,6 +8,7 @@ import { TopicNotesComponent } from './components/topic-notes/topic-notes.compon
 import { AddNoteComponent } from './components/add-note/add-note.component';
 import { NoteDetailComponent } from './components/note-detail/note-detail.component';
 import { authGuard } from './authentication/auth.guard';
+import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 
 export const routes: Routes = [
     {
@@ -17,6 +18,10 @@ export const routes: Routes = [
     {
         path:"sign-up",
         component:RegisterComponent
+    },
+    {
+        path:"u/:username",
+        component:PublicProfileComponent
     },
     {
         path:"",

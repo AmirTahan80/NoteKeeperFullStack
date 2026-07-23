@@ -1,4 +1,4 @@
 ﻿namespace NoteBookKeeper.Api.Models
 {
-    public record LoginUserResponseDto(string Token);
+    public record LoginUserResponseDto(string Token, string UserName);
 }

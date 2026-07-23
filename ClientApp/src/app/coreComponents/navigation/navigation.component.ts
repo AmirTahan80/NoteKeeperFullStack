@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { AuthenticationModel } from '../../environmets/AuthenticationModel';
 
 @Component({
   selector: 'app-navigation',
@@ -42,7 +43,14 @@ export class NavigationComponent {
     { label: 'ثبت نام', route: '/sign-up' }
   ];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authentication: AuthenticationModel
+  ) {}
+
+  get publicUserName(): string | null {
+    return this.authentication.GetUserName();
+  }
 
   toggleMenu() {
     this.isMenuVisible = !this.isMenuVisible;

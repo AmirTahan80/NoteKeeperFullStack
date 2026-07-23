@@ -1,4 +1,11 @@
 <!-- circular-nav.component.html -->
+<a *ngIf="publicUserName"
+   class="public-username"
+   [routerLink]="['/u', publicUserName]"
+   aria-label="نمایش پروفایل عمومی">
+  &#64;{{ publicUserName }}
+</a>
+
 <div class="nav-container" 
      [@menuContainer]="isMenuVisible ? 'visible' : 'void'" 
      *ngIf="isMenuVisible">

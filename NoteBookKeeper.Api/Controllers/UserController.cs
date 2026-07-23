@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -47,7 +48,22 @@ public class UserController(
             expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
             signingCredentials: credentials);
 
-        return Ok(new LoginUserResponseDto(new JwtSecurityTokenHandler().WriteToken(token)));
+        return Ok(new LoginUserResponseDto(
+            new JwtSecurityTokenHandler().WriteToken(token),
+            user.UserName));
+    }
+
+    [AllowAnonymous]
+    [HttpGet("public/{userName}")]
+    public async Task<ActionResult<PublicUserProfileDto>> GetPublicProfile(string userName)
+    {
+        var normalizedUserName = NormalizeUserName(userName);
+        var profile = await context.Users
+            .Where(user => user.NormalizedUserName == normalizedUserName)
+            .Select(user => new PublicUserProfileDto(user.UserName))
+            .SingleOrDefaultAsync();
+
+        return profile is null ? NotFound() : Ok(profile);
     }
 
     [HttpPost("register")]

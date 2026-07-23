@@ -95,9 +95,26 @@ try {
         Invoke-RestMethod "$baseUrl/api/User/register" -Method Post -ContentType 'application/json' -Body $registerBody
     }
 
+    $publicProfileResponse = Invoke-WebRequest "$baseUrl/api/User/public/$firstUser" -UseBasicParsing
+    $publicProfile = $publicProfileResponse.Content | ConvertFrom-Json
+    $publicProperties = @($publicProfile.PSObject.Properties.Name)
+    if ($publicProfile.userName -ne $firstUser) {
+        throw 'The public profile did not return the expected username.'
+    }
+    if ($publicProperties.Count -ne 1 -or $publicProperties[0] -ne 'userName') {
+        throw "The public profile exposed unexpected fields: $($publicProperties -join ', ')."
+    }
+    if ($publicProfileResponse.Content -match [Regex]::Escape("$firstUser@example.test")) {
+        throw 'The public profile exposed the user email address.'
+    }
+
     function Get-TestToken([string]$UserName) {
         $body = @{ userName = $UserName; password = $password } | ConvertTo-Json
-        return (Invoke-RestMethod "$baseUrl/api/User/Login" -Method Post -ContentType 'application/json' -Body $body).token
+        $loginResponse = Invoke-RestMethod "$baseUrl/api/User/Login" -Method Post -ContentType 'application/json' -Body $body
+        if ($loginResponse.userName -ne $UserName) {
+            throw 'Login did not return the public username.'
+        }
+        return $loginResponse.token
     }
 
     $ownerToken = Get-TestToken $firstUser
@@ -146,6 +163,7 @@ try {
         Angular = 'Served'
         Registration = 'Passed'
         Login = 'Passed'
+        PublicProfilePrivacy = 'Passed'
         NoteAndAttachment = 'Passed'
         OwnershipIsolation = 'Passed'
     } | Format-List
