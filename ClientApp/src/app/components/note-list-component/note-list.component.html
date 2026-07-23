@@ -3,10 +3,10 @@
     <!-- Header Section -->
     <div class="header">
       
-      <h1><mat-icon>note</mat-icon>موضوعات</h1>
+      <h1><mat-icon>note</mat-icon>Categories</h1>
       <button mat-flat-button color="primary" routerLink="/new-note">
         <mat-icon>note_add</mat-icon>
-        موضوع جدید
+        New category
       </button>
     </div>
   
@@ -14,16 +14,16 @@
     <mat-card class="search-card">
       <mat-card-content class="search-content">
         <mat-form-field appearance="outline" class="search-input">
-          <mat-label>جستجو</mat-label>
+          <mat-label>Search</mat-label>
           <input matInput
                  [(ngModel)]="searchTerm"
                  (input)="onSearch($event)"
-                 placeholder="جستجو در موضوعات...">
+                 placeholder="Search categories...">
           <mat-icon matPrefix>search</mat-icon>
         </mat-form-field>
   
         <mat-form-field appearance="outline" class="page-size-select">
-          <mat-label>تعداد نمایش در هر صفحه</mat-label>
+          <mat-label>Items per page</mat-label>
           <mat-select [(ngModel)]="pageSize" (selectionChange)="onPageSizeChange()">
             <mat-option *ngFor="let size of pageSizeOptions" [value]="size">
               {{ size }}
@@ -43,7 +43,7 @@
             <span class="note-date">{{ note.creationDate | date:'medium' }}</span>
             <button mat-flat-button color="warn" [routerLink]="['/note-list/', note.uuid]" style="margin: 10px;">
               <mat-icon> format_indent_decrease</mat-icon>
-              جزئیات
+              Details
             </button>
           </div>
   
@@ -52,7 +52,7 @@
           </div>
   
           <div *ngIf="!loading && notes.length === 0" class="empty-state">
-            موردی یافت نشد
+            No categories found
           </div>
         </div>
       </mat-card-content>
@@ -65,6 +65,6 @@
       [pageSizeOptions]="pageSizeOptions"
       [pageIndex]="currentPage"
       (page)="onPageChange($event)"
-      aria-label="انتخاب صفحه">
+      aria-label="Select page">
     </mat-paginator>
   </div>

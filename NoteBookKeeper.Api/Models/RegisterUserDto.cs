@@ -13,6 +13,6 @@ public record RegisterUserDto
     [Required, StringLength(128, MinimumLength = 8)]
     public string Password { get; set; } = string.Empty;
 
-    [Compare(nameof(Password), ErrorMessage = "رمز عبور یکسان نیست")]
+    [Compare(nameof(Password), ErrorMessage = "The passwords do not match.")]
     public string RePassword { get; set; } = string.Empty;
 }

@@ -33,8 +33,8 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImEwMjk3NWZlLWM2OGItNDY1MC05OThkLTA4ZGQzZjEyYWI5NCIsImV4cCI6MTczODA2ODY4MiwiaXNzIjoiTm90ZUtlZXBlci5pciIsImF1ZCI6Ik5vdGVLZWVwZXIuaXIifQ.EKwG5bU1sOEV0_jo7sXAgs1JsVticprFQqSKmw9KCjI
 
 {
-  "topic":"تست این ابزار باحال",
-  "description":"این یک رزومه تست میباشد"
+  "topic":"Example category",
+  "description":"An example category created from the HTTP file"
 }
 
 ###
@@ -46,7 +46,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImEwMjk3NWZlLWM2OGItNDY1MC05OThkLTA4ZGQzZjEyYWI5NCIsImV4cCI6MTczODA2ODY4MiwiaXNzIjoiTm90ZUtlZXBlci5pciIsImF1ZCI6Ik5vdGVLZWVwZXIuaXIifQ.EKwG5bU1sOEV0_jo7sXAgs1JsVticprFQqSKmw9KCjI
 
 {
-  "detail":"این تست آیتم هاست",
+  "detail":"An example note item",
   "searchWords":"",
   "noteSettingId":"3608cb8f-12a6-44d1-8625-43d0c5c4b33c",
   "redirectLink":""

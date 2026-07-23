@@ -2,8 +2,8 @@
 <div class="create-note-container">
     <mat-card class="note-card">
       <mat-card-header>
-        <mat-card-title>افزودن موضوع نوت</mat-card-title>
-        <mat-card-subtitle>لطفاً اطلاعات نوت خود را وارد کنید</mat-card-subtitle>
+        <mat-card-title>Create a category</mat-card-title>
+        <mat-card-subtitle>Enter a name and an optional description.</mat-card-subtitle>
       </mat-card-header>
   
       <mat-card-content>
@@ -13,23 +13,23 @@
               autocomplete="off">
           
           <mat-form-field appearance="outline" class="w-full">
-            <mat-label>موضوع</mat-label>
+            <mat-label>Category name</mat-label>
             <input matInput
                    formControlName="subject"
-                   placeholder="موضوع را وارد کنید">
+                   placeholder="Enter a category name">
             <mat-error *ngIf="noteForm.get('subject')?.hasError('required')">
-              موضوع اجباری است
+              A category name is required
             </mat-error>
             <mat-error *ngIf="noteForm.get('subject')?.hasError('minlength')">
-              موضوع باید حداقل ۳ حرف باشد
+              The category name must contain at least 3 characters
             </mat-error>
           </mat-form-field>
   
           <mat-form-field appearance="outline" class="w-full">
-            <mat-label>توضیحات</mat-label>
+            <mat-label>Description</mat-label>
             <textarea matInput
                       formControlName="description"
-                      placeholder="توضیحات خود را بنویسید"
+                      placeholder="Add an optional description"
                       rows="8"
                       cdkTextareaAutosize
                       cdkAutosizeMinRows="8"
@@ -43,7 +43,7 @@
                     type="submit"
                     [disabled]="!noteForm.valid || isLoading">
               <mat-icon>save</mat-icon>
-              <span>ثبت نوت</span>
+              <span>Create category</span>
             </button>
             
             <button mat-stroked-button
@@ -51,7 +51,7 @@
                     (click)="noteForm.reset()"
                     [disabled]="isLoading">
               <mat-icon>refresh</mat-icon>
-              <span>پاک کردن</span>
+              <span>Clear</span>
             </button>
           </div>
         </form>
@@ -60,6 +60,6 @@
   
     <app-loading-overlay 
       *ngIf="isLoading"
-      message="در حال ذخیره نوت...">
+      message="Creating category...">
     </app-loading-overlay>
   </div>

@@ -37,8 +37,12 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     return this.noteItem.searchWords?.split(',').filter(Boolean) || [];
   }
 
-  public getPersianDate(): string {
-    return new Date(this.noteItem.creationDate).toLocaleDateString('fa-IR');
+  public getFormattedDate(): string {
+    return new Date(this.noteItem.creationDate).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
 
   private loadNoteItem(noteId: string): void {
@@ -46,7 +50,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: note => this.loadFiles(note),
         error: () => {
-          this.error = 'خطا در دریافت اطلاعات جزوه';
+          this.error = 'Could not load the note.';
           this.loading = false;
         }
       });
@@ -70,7 +74,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
         this.loading = false;
       },
       error: () => {
-        this.error = 'خطا در دریافت فایل‌های پیوست';
+        this.error = 'Could not load the attached files.';
         this.loading = false;
       }
     });

@@ -56,14 +56,14 @@ public class AddNoteController(NoteKeeperContext context) : ControllerBase
 
         if (setting is null)
         {
-            return NotFound(new ProblemDetails { Title = "سرفصل یافت نشد." });
+            return NotFound(new ProblemDetails { Title = "Category not found." });
         }
 
         if (request.Files.Count > MaxFileCount || request.Files.Any(file => file.Length > MaxFileSize))
         {
             return BadRequest(new ProblemDetails
             {
-                Title = $"حداکثر {MaxFileCount} فایل و حداکثر ۵ مگابایت برای هر فایل مجاز است."
+                Title = $"A maximum of {MaxFileCount} files and 5 MB per file is allowed."
             });
         }
 
@@ -196,7 +196,7 @@ public class AddNoteController(NoteKeeperContext context) : ControllerBase
             .SingleOrDefaultAsync(note => note.Uuid == noteId && note.UserId == GetUserId());
         if (noteSetting is null)
         {
-            return NotFound(new ProblemDetails { Title = "نوت موردنظر یافت نشد." });
+            return NotFound(new ProblemDetails { Title = "The requested note was not found." });
         }
 
         noteSetting.IsDeleted = true;

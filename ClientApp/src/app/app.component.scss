@@ -20,24 +20,11 @@
   }
 }
 
-// RTL & Font setup
+// Application font
 * {
-  font-family: Vazir, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-// Material theme setup
 .mat-typography {
-  font-family: Vazir, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-// Material Components RTL setup
-[dir='rtl'] {
-  .mat-form-field-appearance-outline {
-    .mat-form-field-outline-start {
-      border-radius: 0 4px 4px 0;
-    }
-    .mat-form-field-outline-end {
-      border-radius: 4px 0 0 4px;
-    }
-  }
+  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
