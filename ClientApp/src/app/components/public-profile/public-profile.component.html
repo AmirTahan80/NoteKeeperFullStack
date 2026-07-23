@@ -1,19 +1,19 @@
-<main class="profile-page" dir="rtl">
+<main class="profile-page">
   <section class="profile-card" *ngIf="loading">
-    <p>در حال دریافت پروفایل...</p>
+    <p>Loading profile...</p>
   </section>
 
   <section class="profile-card" *ngIf="!loading && !notFound">
     <div class="avatar" aria-hidden="true">{{ userName.charAt(0).toUpperCase() }}</div>
-    <p class="label">نام کاربری عمومی</p>
-    <h1 dir="ltr">&#64;{{ userName }}</h1>
+    <p class="label">Public username</p>
+    <h1>&#64;{{ userName }}</h1>
     <p class="privacy-note">
-      ایمیل و سایر اطلاعات خصوصی این کاربر نمایش داده نمی‌شود.
+      This user's email and other private profile details are hidden.
     </p>
   </section>
 
   <section class="profile-card" *ngIf="!loading && notFound">
-    <h1>کاربر پیدا نشد</h1>
-    <a routerLink="/">بازگشت به خانه</a>
+    <h1>User not found</h1>
+    <a routerLink="/">Back to home</a>
   </section>
 </main>
