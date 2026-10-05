@@ -131,7 +131,10 @@ export class AddNoteComponent implements OnInit {
       this.loading = true;
       const formData = new FormData();
       formData.append('detail', this.noteForm.get('detail')?.value);
-      formData.append('redirectLink', this.noteForm.get('redirectLink')?.value);
+      const redirectLink = (this.noteForm.get('redirectLink')?.value || '').trim();
+      if (redirectLink) {
+        formData.append('redirectLink', redirectLink);
+      }
       formData.append('noteSettingId', this.topicId);
       
       this.searchWords.forEach(word => {
@@ -146,7 +149,6 @@ export class AddNoteComponent implements OnInit {
         .subscribe({
           next: () => {
             this.showSuccessMessage();
-            this.router.navigate(['/note-list/', this.topicId]);
             this.loading = false;
           },
           error: () => {
@@ -163,7 +165,7 @@ export class AddNoteComponent implements OnInit {
       horizontalPosition: 'start',
       panelClass: 'success-snackbar'
     });
-    this.router.navigate(['note-list'])
+    this.router.navigate(['/note-list', this.topicId]);
   }
 
   private showErrorMessage(errMsg:string='Could not save the note.'): void {

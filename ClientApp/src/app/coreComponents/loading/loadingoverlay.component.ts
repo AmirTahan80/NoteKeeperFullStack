@@ -11,7 +11,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @Component({
-  selector: 'app-loading-overlay ',
+  selector: 'app-loading-overlay',
   standalone:true,
   imports:[
     ReactiveFormsModule,

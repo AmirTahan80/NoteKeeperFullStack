@@ -38,11 +38,25 @@ export class TopicNotesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.topicId = this.route.snapshot.paramMap.get('id') || '';
+    this.loadTopicDetails();
     this.loadTopicNotes();
   }
 
   ngOnDestroy(): void {
     this.objectUrls.forEach(url => URL.revokeObjectURL(url));
+  }
+
+  private loadTopicDetails(): void {
+    if (!this.topicId) return;
+
+    this.apiService
+      .get<{ topic: string }>(`${this.apiSettings.getNoteCategory}/${this.topicId}`)
+      .subscribe({
+        next: category => {
+          this.topicName = category.topic;
+        },
+        error: () => {}
+      });
   }
 
   private loadTopicNotes(): void {

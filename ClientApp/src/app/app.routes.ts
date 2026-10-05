@@ -24,6 +24,11 @@ export const routes: Routes = [
         component:PublicProfileComponent
     },
     {
+        path:"home",
+        redirectTo: "",
+        pathMatch: "full"
+    },
+    {
         path:"",
         component:HomeComponent
     },
@@ -51,5 +56,9 @@ export const routes: Routes = [
         path:"app-note-detail/:id",
         component:NoteDetailComponent,
         canActivate: [authGuard]
+    },
+    {
+        path: "**",
+        redirectTo: ""
     }
 ];

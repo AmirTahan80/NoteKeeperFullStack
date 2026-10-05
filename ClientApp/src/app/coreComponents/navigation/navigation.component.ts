@@ -36,7 +36,7 @@ export class NavigationComponent {
   isMenuVisible = false;
   currentRotation = 0;
   menuItems = [
-    { label: 'Home', route: '/home' },
+    { label: 'Home', route: '/' },
     { label: 'Notes', route: '/note-list' },
     { label: 'New category', route: '/new-note' },
     { label: 'Sign in', route: '/sign-in' },

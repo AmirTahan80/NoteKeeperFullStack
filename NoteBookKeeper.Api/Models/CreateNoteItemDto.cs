@@ -9,8 +9,14 @@ public sealed class CreateNoteItemDto
 
     public List<string> SearchWords { get; set; } = [];
 
+    private string? _redirectLink;
+
     [Url]
-    public string? RedirectLink { get; set; }
+    public string? RedirectLink
+    {
+        get => _redirectLink;
+        set => _redirectLink = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+    }
 
     public ICollection<IFormFile> Files { get; set; } = [];
 

@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TextFieldModule } from '@angular/cdk/text-field';
-import { LoadingOverlayComponent } from '../../coreComponents/loading/loadingoverlay.component ';
+import { LoadingOverlayComponent } from '../../coreComponents/loading/loadingoverlay.component';
 import { CommonModule, DOCUMENT} from '@angular/common';
 import { ApiService } from '../../services/base.api';
 import { ApiUrlSettings } from '../../environmets/ApiSettings';
@@ -90,6 +90,7 @@ export class NewNoteComponent implements OnInit {
             }
             else
             {
+              this.isLoading = false;
               this.showErrorMessage();
             }
           },
@@ -103,9 +104,8 @@ export class NewNoteComponent implements OnInit {
           }
         });
       } catch (error) {
-        this.showErrorMessage();
-      } finally {
         this.isLoading = false;
+        this.showErrorMessage();
       }
     }
   }
@@ -117,7 +117,7 @@ export class NewNoteComponent implements OnInit {
       horizontalPosition: 'start',
       panelClass: 'success-snackbar'
     });
-    this.router.navigate(['note-list'])
+    this.router.navigate(['/note-list']);
   }
 
   private showErrorMessage(): void {

@@ -157,6 +157,24 @@ public class AddNoteController(NoteKeeperContext context) : ControllerBase
         return Ok(items);
     }
 
+    [HttpGet("[action]/{noteId:guid}")]
+    public async Task<IActionResult> GetNoteCategory(Guid noteId)
+    {
+        var userId = GetUserId();
+        var category = await context.NoteSettings
+            .Where(note => note.Uuid == noteId && note.UserId == userId)
+            .Select(note => new
+            {
+                note.Uuid,
+                note.Topic,
+                note.Description,
+                note.CreationDate
+            })
+            .SingleOrDefaultAsync();
+
+        return category is null ? NotFound() : Ok(category);
+    }
+
     [HttpGet("[action]/{noteItemId:guid}")]
     public async Task<ActionResult<GetNoteItemsDto>> GetNoteItemById(Guid noteItemId)
     {
